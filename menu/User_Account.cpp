@@ -136,7 +136,7 @@ void User_Account::edit_Name_Surname(WINDOW* win1)
     char newName[20];
     getstr(newName);
 
-    mvprintw(win1, y + 2, 1, "Input new Surname");
+    mvwprintw(win1, y + 2, 1, "Input new Surname");
     wrefresh(win1);
     char newSurname[20];
     getstr(newSurname);
@@ -168,7 +168,6 @@ void User_Account::showAccount(int& choice) const {
     noecho();
 
     std::string choices[] = {"Start New Game", "Exit", "Edit Account"};
-    int choice;
     int highlight = 0;
     while(true) {
         for (int i = 0; i < 3; ++i) {

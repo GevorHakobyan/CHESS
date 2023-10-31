@@ -28,9 +28,7 @@ class User_Account
     static bool passwordAuthentication(const std::string&, std::string&, WINDOW*);
     bool name_surname_Authentication(const std::string&, WINDOW*) const;
     //Account
-    void showAccount(int& const);
-    void startNewGame();// comming soon 
-    void exit();// comming soon
+    void showAccount(int&) const;
     void edit_Name_Surname(WINDOW*);
     private:
     Password getPassword() const;

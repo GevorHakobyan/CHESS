@@ -1,62 +1,58 @@
 #include "menu.hpp"
 #include <ncurses.h>
 #include <string>
+#include <tuple>
 
 //ALiases
-//using Password = std::pair<std::string, int>;
 
-WINDOW* Menu::Create_Window( int y_of_window, int x_of_window,int window_length, int window_width){    WINDOW* win = newwin(window_length,window_width, y_of_window, x_of_window);
-    return win;
+Menu::Menu() {
+    m_menuWindow = newwin(10, 30, 18, 82);
+    refresh();
+    m_myMenuChoices.push_back("Sign Up");
+    m_myMenuChoices.push_back("Sign In");
+    m_myMenuChoices.push_back("Start New Game");
+    m_myMenuChoices.push_back("Exit");
 }
 
+void Menu::PrintMenu() const {
+    wrefresh(m_menuWindow);
+    box(m_menuWindow, 0, 0);
+    wrefresh(m_menuWindow);
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_GREEN);
+    wbkgd(m_menuWindow, COLOR_PAIR(1));
 
-void Menu::Select_Button(WINDOW* win) { 
-    std::string choices[] = {"Sign in!", "Sign up!"};
-    int choice;
-    int highlight = 0;
-    mvwprintw(win,1,10, "HELLO CHESS.COM!");
-    wrefresh(win);
+    for (int i = 0; i < m_myMenuChoices.size(); ++i) {
+        mvwprintw(m_menuWindow, i + 1, 1, "%s", m_myMenuChoices[i].c_str());
+        wrefresh(m_menuWindow);
+    }
+}
+
+void Menu::makeChoice() {
+    char c;
+    wrefresh(m_menuWindow);
 
     while(true) {
-        for (int i = 0; i < 2; ++i) {
-            if (i == highlight) {
-                wattron(win, A_REVERSE);
+        c = getch();
+        switch(c) {
+            case KEY_UP: {
+                wattron(m_menuWindow, A_REVERSE);
+                wrefresh(m_menuWindow);
+                break;
             }
-            const char* choice = choices[i].c_str();
-            mvwprintw(win, i + 2, 10,"%s", choice);
-            wattroff(win, A_REVERSE);
+            case KEY_DOWN: {
+                wattron(m_menuWindow, A_REVERSE);
+                wrefresh(m_menuWindow);
+                break;
+            }
+            default: {
+                break;
+            }
+            wattroff(m_menuWindow, A_REVERSE);
         }
-        wrefresh(win);
-        choice = wgetch(win);
-
-    switch (choice) {
-    case KEY_UP:
-        highlight--;
-        m_button_choice = 0;
-        if (-1 == highlight) {
-            highlight = 0;
-        }
-        break;
-    case KEY_DOWN:
-        highlight++;
-        m_button_choice = 1;
-        if (2 == highlight) {
-            highlight = 1;
-        }
-        break;
-    default:
-        break;
     }
-    if (choice == 10) {
-        wclear(win);
-        delwin(win);
-        refresh();
-        break;
-    }
-  }
 }
-
-void Sign_up(int y_of_window, int x_of_window, int window_length, int window_width)
+/*void Sign_up(int y_of_window, int x_of_window, int window_length, int window_width)
 {
     WINDOW* sign_up_window = newwin(window_length,window_width, y_of_window, x_of_window);
     std::string arguments[] = {"name: ", "surname: ", "password: ", "favourite number: "};
@@ -91,7 +87,7 @@ void Sign_up(int y_of_window, int x_of_window, int window_length, int window_wid
             Password password = std::make_pair(myPassword, favouriteNumber);
             const std::string name{parameters[0]};
             const std::string surname{parameters[1]};
-            CreateAccount(password, name, surname, sign_up_window);
+            //CreateAccount(password, name, surname, sign_up_window);
 
             refresh();
             break;
@@ -140,5 +136,4 @@ void Sign_in(int y_Of_WINDOW, int x_Of_WINDOW, int Window_Length, int Window_Wid
 
 void CreateAccount(const Password& password, const std::string& name, const std::string& surname, WINDOW* win1) {
     User_Account user1{password, name, surname, win1};
-    user1.showAccount();
-}
+}*/
