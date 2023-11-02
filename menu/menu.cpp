@@ -96,7 +96,10 @@ void Menu::Sign_up(const SizeAndLocation& windowCharacters) {
             Password password = std::make_pair(myPassword, favouriteNumber);
             const std::string name{parameters[0]};
             const std::string surname{parameters[1]};
-            //CreateAccount(password, name, surname, sign_up_window);
+            wrefresh(sign_up_window);
+            wclear(sign_up_window);
+            delwin(sign_up_window);
+            CreateAccount(password, name, surname);
 
             refresh();
             break;
@@ -104,10 +107,7 @@ void Menu::Sign_up(const SizeAndLocation& windowCharacters) {
 
     }
 
-    wrefresh(sign_up_window);
-    getch();
-    wclear(sign_up_window);
-    delwin(sign_up_window);
+    
 }
 
 void Menu::Sign_in(const SizeAndLocation& windowCharacters)  {
@@ -144,14 +144,10 @@ void Menu::Sign_in(const SizeAndLocation& windowCharacters)  {
 }
 
 void Menu::PlayAsHost() {
-    delwin(m_menuWindow);
-    wclear(m_menuWindow);
     return;
 }
 
 void Menu::Exit() {
-    delwin(m_menuWindow);
-    wclear(m_menuWindow);
     return;
 }
 
@@ -178,6 +174,8 @@ void Menu::DetectChoice() {
     }
 }
 
-/*void CreateAccount(const Password& password, const std::string& name, const std::string& surname, WINDOW* win1) {
-    User_Account user1{password, name, surname, win1};
-}*/
+void Menu::CreateAccount(const Password& password, const std::string& name, const std::string& surname) {
+    User_Account user1{password, name, surname};
+    int choice {0};
+    user1.showAccount(choice);
+}

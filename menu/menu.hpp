@@ -23,8 +23,9 @@ class Menu
         void Sign_in(const SizeAndLocation&);
         void PlayAsHost();
         void Exit();
+        private:
         void DetectChoice();
-        //void CreateAccount(const Password& password, const std::string& name, const std::string& surname, WINDOW* win1);
+        void CreateAccount(const Password& password, const std::string& name, const std::string& surname);
     private:
         Choices m_myMenuChoices;
         WINDOW* m_menuWindow{nullptr};

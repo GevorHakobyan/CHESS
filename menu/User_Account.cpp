@@ -3,25 +3,26 @@
 #include <ncurses.h>
 #include <string>
 
-User_Account::User_Account(const Password password, const std::string& name,  const std::string& surname, WINDOW* win1) 
+User_Account::User_Account(const Password password, const std::string& name,  const std::string& surname) 
     : m_name {name}, 
     m_surname{surname}, 
     m_password{password} 
     {
-        setName(name, win1);
-        setSurname(surname, win1);
+        m_accountWindow = newwin(20, 50,  Y, X);
+        setName(name);
+        setSurname(surname);
         setPassword(password);
     }
 //setters
-void User_Account::setName(const std::string& name, WINDOW* win1) {
-   if (name_surname_Authentication(name, win1)) {
+void User_Account::setName(const std::string& name, WINDOW* win) {
+   if (name_surname_Authentication(name, win)) {
     m_name = name;
     return;
    } 
 }
-void User_Account::setSurname(const std::string& surname, WINDOW* win1)
+void User_Account::setSurname(const std::string& surname, WINDOW* win)
 {
-    if (name_surname_Authentication(surname, win1)) {
+    if (name_surname_Authentication(surname, win)) {
         m_surname = surname;
         return;
     }
@@ -50,17 +51,23 @@ Password User_Account::getPassword() const
 
 void User_Account::passwordRecovery()
 {
-    int favouriteNumber;
-    std::cout << "What is your favourite number?: ";
-    std::cin >> favouriteNumber;
+    char favouriteNumber;
+    WINDOW* passWordWin = newwin(20, 50, Y, X);
+    refresh();
+    mvwprintw(passWordWin, 1, 1,  "What is your favourite number?: ");
+    wrefresh(passWordWin);
+    favouriteNumber = wgetch(passWordWin);
 
     char decision;
-    if (favouriteNumber == m_password.second) {
-        std::cout << "Your password is: " << getPassword().first << "\n";
+    if (static_cast<int>(favouriteNumber) == m_password.second) {
+        mvwprintw(passWordWin, 2, 1, "Your password is: ");
+        mvwprintw(passWordWin, 2, 17,"%s",getPassword().first.c_str());
+        wrefresh(passWordWin);
     } else {
-        std::cout << "Authentication failed!" << "\n";
-        std::cout << "Do you want to create new one? y/n";
-        std::cin >> decision;
+        mvwprintw(passWordWin, 2, 1,"Authentication failed!");
+        mvwprintw(passWordWin, 3, 1, "Do you want to create new one? y/n");
+        wrefresh(passWordWin);
+        decision = wgetch(passWordWin);
     }
 
     if (decision == 'n' || decision == 'N') {
@@ -68,20 +75,34 @@ void User_Account::passwordRecovery()
     }
 
     Password newPassword;
-    std::cout << "Enter your favourite number: ";
-    std::cin >> newPassword.second;
-    std::cout << "Enter new passwrod: ";
-    std::cin >> newPassword.first;
+    char first;
+    char second;
+
+    mvwprintw(passWordWin,4, 1, "Enter your favourite number: ");
+    wrefresh(passWordWin);
+    second = wgetch(passWordWin);
+    mvwprintw(passWordWin, 5, 1,"Enter new passwrod: ");
+    wrefresh(passWordWin);
+    first = wgetch(passWordWin);
+    
+    std::string First {1,first};
+    std::string Second {1,second};
+    if (passwordAuthentication(First, Second, passWordWin)) { 
+    newPassword.second = static_cast<int>(second);
+    newPassword.first = first;
     m_password = newPassword;
+    }
 }
 
 bool User_Account::passwordAuthentication(const std::string& text, std::string& favouriteNumber, WINDOW* win1) {
-    int number;
+    int number; 
+    int y, x;
+    getyx(win1, y, x);
+
     try {
         number = std::stoi(favouriteNumber);
     } catch(const std::invalid_argument &ex) {
-        int y, x;
-        getyx(win1, y, x);
+       
         mvwprintw(win1, y + 1, x - 21, "Invalid argument:");
         mvwprintw(win1, y + 1, x - 4,"%s",ex.what());
         wrefresh(win1);
@@ -97,7 +118,8 @@ bool User_Account::passwordAuthentication(const std::string& text, std::string& 
 
     for (const auto& elem : listOfPasswords) {
         if (password.first == elem.first) {
-            std::cout << "Password already exist!" << "\n";
+            mvwprintw(win1, y + 1, x - 21,"Password already exist!");
+            wrefresh(win1);
             check  = false;
             }
     }
@@ -107,9 +129,13 @@ bool User_Account::passwordAuthentication(const std::string& text, std::string& 
 
 bool User_Account::name_surname_Authentication(const std::string& nameOrSurname, WINDOW* win1) const
 {
+    if (win1 == nullptr) {
+        win1 = m_accountWindow;
+    }
+    int y, x;
+    getyx(win1, y, x);
     if (nameOrSurname.length() <= 2) {
-        int y, x;
-        getyx(win1, y, x);
+     
         mvwprintw(win1, y + 1, x - 21, "Too short name! Should be at least 3 characters long:");
         wrefresh(win1);
         getch();
@@ -119,32 +145,32 @@ bool User_Account::name_surname_Authentication(const std::string& nameOrSurname,
     for (int i = 0; i < nameOrSurname.length(); i++) {
         int n = static_cast<int>(nameOrSurname[i]);
         if (n < 65 || n > 122) {
-            std::cout << "Invalid character in your name/Surname: " << nameOrSurname[i] << "\n";
-            std::cout << "Your default name  and Surname are: " << "Unknown" << " User" << "\n";
+            mvwprintw(win1, y + 1, x - 21,"Invalid character in your name/Surname: ");
+            wrefresh(win1);
+            mvwprintw(win1,y + 2, x- 21,"Your default name  and Surname are: Unknown, User");
+            wrefresh(win1);
             return false;
         }
     }
     return true;
 }
-void User_Account::edit_Name_Surname(WINDOW* win1)
+void User_Account::edit_Name_Surname()
 {
-    int y;
-    int x;
-    getyx(win1, y, x);
-    mvwprintw(win1, y + 1, 1, "Input new name");
-    wrefresh(win1);
+    WINDOW* editWindow = newwin(20, 50, Y, X);
+    mvwprintw(editWindow, 1, 1, "Input new name");
+    wrefresh(editWindow);
     char newName[20];
     getstr(newName);
 
-    mvwprintw(win1, y + 2, 1, "Input new Surname");
-    wrefresh(win1);
+    mvwprintw(editWindow,2, 1, "Input new Surname");
+    wrefresh(editWindow);
     char newSurname[20];
     getstr(newSurname);
 
     std::string name(newName);
     std::string surname(newSurname);
-    setName(name, win1);
-    setSurname(surname, win1);
+    setName(name, editWindow);
+    setSurname(surname, editWindow);
 }
 
 void User_Account::showAccount(int& choice) const {
