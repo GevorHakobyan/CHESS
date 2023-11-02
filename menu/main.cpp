@@ -14,7 +14,6 @@ int main()
     //sign in or sign up
     Menu startMenu;
     startMenu.PrintMenu();
-    startMenu.makeChoice();
     //END
     getch();
     refresh();

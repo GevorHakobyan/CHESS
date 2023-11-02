@@ -4,9 +4,11 @@
 #include <tuple>
 
 //ALiases
+//using Choices = std::vector<std::string>;
+//using SizeAndLocation = std::tuple<int, int, int, int>;
 
 Menu::Menu() {
-    m_menuWindow = newwin(10, 30, 18, 82);
+    m_menuWindow = newwin(10, 30, Y, X);
     refresh();
     m_myMenuChoices.push_back("Sign Up");
     m_myMenuChoices.push_back("Sign In");
@@ -14,47 +16,54 @@ Menu::Menu() {
     m_myMenuChoices.push_back("Exit");
 }
 
-void Menu::PrintMenu() const {
+void Menu::PrintMenu() {
     wrefresh(m_menuWindow);
     box(m_menuWindow, 0, 0);
     wrefresh(m_menuWindow);
     start_color();
     init_pair(1, COLOR_WHITE, COLOR_GREEN);
     wbkgd(m_menuWindow, COLOR_PAIR(1));
+    int c;
 
-    for (int i = 0; i < m_myMenuChoices.size(); ++i) {
-        mvwprintw(m_menuWindow, i + 1, 1, "%s", m_myMenuChoices[i].c_str());
-        wrefresh(m_menuWindow);
-    }
-}
-
-void Menu::makeChoice() {
-    char c;
-    wrefresh(m_menuWindow);
-
+    keypad(m_menuWindow, TRUE);
     while(true) {
-        c = getch();
-        switch(c) {
-            case KEY_UP: {
+        for (int i = 0; i < m_myMenuChoices.size(); ++i) {
+            if (i == m_activeState) {
                 wattron(m_menuWindow, A_REVERSE);
-                wrefresh(m_menuWindow);
-                break;
             }
-            case KEY_DOWN: {
-                wattron(m_menuWindow, A_REVERSE);
-                wrefresh(m_menuWindow);
-                break;
-            }
-            default: {
-                break;
-            }
+            mvwprintw(m_menuWindow, i + 1, 10, "%s", m_myMenuChoices[i].c_str());
             wattroff(m_menuWindow, A_REVERSE);
+            wrefresh(m_menuWindow);
+        }
+        wrefresh(m_menuWindow);
+        c = wgetch(m_menuWindow);
+    switch(c) {
+        case KEY_UP: {
+            if (m_activeState != 0) {
+                --m_activeState;
+            }
+            break;
+        }
+        case KEY_DOWN: {
+            if (m_activeState != 3) {
+                ++m_activeState;
+            }
+            break;
+            }
+            case 10: {
+            DetectChoice();
+            break;
+            }
+            case 'q': {
+            return;
+            }
         }
     }
 }
-/*void Sign_up(int y_of_window, int x_of_window, int window_length, int window_width)
-{
-    WINDOW* sign_up_window = newwin(window_length,window_width, y_of_window, x_of_window);
+
+void Menu::Sign_up(const SizeAndLocation& windowCharacters) {
+    const auto[n_lines, n_rows, y, x] = windowCharacters;
+    WINDOW* sign_up_window = newwin(n_lines, n_rows, y, x);
     std::string arguments[] = {"name: ", "surname: ", "password: ", "favourite number: "};
     refresh();
 
@@ -101,9 +110,9 @@ void Menu::makeChoice() {
     delwin(sign_up_window);
 }
 
-void Sign_in(int y_Of_WINDOW, int x_Of_WINDOW, int Window_Length, int Window_Width)
-{
-    WINDOW* sign_in_Window = newwin(Window_Length,Window_Width,y_Of_WINDOW, x_Of_WINDOW);
+void Menu::Sign_in(const SizeAndLocation& windowCharacters)  {
+    const auto[n_lines, n_rows, y, x] = windowCharacters;
+    WINDOW* sign_in_Window = newwin(n_lines, n_rows, y, x);
     refresh();
 
     start_color();
@@ -134,6 +143,41 @@ void Sign_in(int y_Of_WINDOW, int x_Of_WINDOW, int Window_Length, int Window_Wid
     delwin(sign_in_Window);
 }
 
-void CreateAccount(const Password& password, const std::string& name, const std::string& surname, WINDOW* win1) {
+void Menu::PlayAsHost() {
+    delwin(m_menuWindow);
+    wclear(m_menuWindow);
+    return;
+}
+
+void Menu::Exit() {
+    delwin(m_menuWindow);
+    wclear(m_menuWindow);
+    return;
+}
+
+void Menu::DetectChoice() {
+    SizeAndLocation windowCharacters = std::make_tuple(20, 50, Y, X);
+
+    switch(m_activeState) {
+        case 0: {
+            Sign_up(windowCharacters);
+            break;
+        }
+        case 1: {
+            Sign_in(windowCharacters);
+            break;
+        }
+        case 2: {
+            PlayAsHost();
+            break;
+        }
+        case 3: {
+            Exit();
+            break;
+        }
+    }
+}
+
+/*void CreateAccount(const Password& password, const std::string& name, const std::string& surname, WINDOW* win1) {
     User_Account user1{password, name, surname, win1};
 }*/
