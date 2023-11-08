@@ -8,7 +8,7 @@
 //using SizeAndLocation = std::tuple<int, int, int, int>;
 
 Menu::Menu() {
-    m_menuWindow = newwin(10, 30, Y, X);
+    m_menuWindow = newwin(20, 50, Y, X);
     refresh();
     m_myMenuChoices.push_back("Sign Up");
     m_myMenuChoices.push_back("Sign In");
@@ -143,11 +143,13 @@ void Menu::Sign_in(const SizeAndLocation& windowCharacters)  {
     delwin(sign_in_Window);
 }
 
-void Menu::PlayAsHost() {
+void Menu::PlayAsHost() {  //NOt implemented yet
     return;
 }
 
 void Menu::Exit() {
+    delwin(m_menuWindow);
+    refresh();
     return;
 }
 
@@ -175,7 +177,7 @@ void Menu::DetectChoice() {
 }
 
 void Menu::CreateAccount(const Password& password, const std::string& name, const std::string& surname) {
-    User_Account user1{password, name, surname};
-    int choice {0};
-    user1.showAccount(choice);
+     User_Account user1{password, name, surname};
+    User_Account::addToAccountList(user1);
+    user1.showAccount();
 }

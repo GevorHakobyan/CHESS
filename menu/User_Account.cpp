@@ -3,12 +3,16 @@
 #include <ncurses.h>
 #include <string>
 
-User_Account::User_Account(const Password password, const std::string& name,  const std::string& surname) 
+User_Account::User_Account(const Password& password, const std::string& name,  const std::string& surname) 
     : m_name {name}, 
     m_surname{surname}, 
     m_password{password} 
     {
-        m_accountWindow = newwin(20, 50,  Y, X);
+        int maxY, maxX;
+        getmaxyx(stdscr, maxY, maxX);
+        m_accountWindow = newwin(maxY, maxX, 0, 0);
+        refresh();
+        m_accountProperties = {"Start New game", "Edit Account", "Exit"};
         setName(name);
         setSurname(surname);
         setPassword(password);
@@ -30,7 +34,6 @@ void User_Account::setSurname(const std::string& surname, WINDOW* win)
 
 void User_Account::setPassword(Password password) {
     m_password = password;
-    addToPasswordList(m_password);
 }
 
 //getters
@@ -116,14 +119,13 @@ bool User_Account::passwordAuthentication(const std::string& text, std::string& 
     password.first = text;
     password.second = number;
 
-    for (const auto& elem : listOfPasswords) {
-        if (password.first == elem.first) {
+    for (const auto& elem : m_listOfAccounts) {
+        if (password == elem.second) {
             mvwprintw(win1, y + 1, x - 21,"Password already exist!");
             wrefresh(win1);
             check  = false;
             }
     }
-    addToPasswordList(password);
     return check;
 }
 
@@ -173,7 +175,7 @@ void User_Account::edit_Name_Surname()
     setSurname(surname, editWindow);
 }
 
-void User_Account::showAccount(int& choice) const {
+void User_Account::showAccount() {
     int max_y;
     int max_x;
     getmaxyx(stdscr, max_y, max_x);
@@ -194,6 +196,7 @@ void User_Account::showAccount(int& choice) const {
     noecho();
 
     std::string choices[] = {"Start New Game", "Exit", "Edit Account"};
+    int choice;
     int highlight = 0;
     while(true) {
         for (int i = 0; i < 3; ++i) {
@@ -232,9 +235,33 @@ void User_Account::showAccount(int& choice) const {
   }
     refresh();
 } 
-void User_Account::addToPasswordList(const Password password) 
-{
-    listOfPasswords.push_back(password);
+void User_Account::addToAccountList(const User_Account& account) {
+      std::pair<User_Account, Password> account1 = std::make_pair(account, account.getPassword()); 
+      m_listOfAccounts.push_back(account1);
 }
 
-std::vector<Password> User_Account::listOfPasswords = {};
+void User_Account::findAccount(const Password& password) {
+    for (auto& account : m_listOfAccounts) {
+        if (account.second == password) {
+            account.first.showAccount();
+        }
+    }
+}
+
+void User_Account::detectChoice(const int choice) {
+    switch(choice) {
+    case 0: {
+        break;
+    }
+    case 1: {
+        edit_Name_Surname();
+        break;
+    }
+    case 2: {
+        wclear(m_accountWindow);
+        wrefresh(m_accountWindow);
+        break;
+    }
+    }
+}
+std::vector<std::pair<User_Account, Password>> User_Account::m_listOfAccounts = {};
