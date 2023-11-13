@@ -1,0 +1,3 @@
+class Controller {
+    virtual ~Controller();
+};
