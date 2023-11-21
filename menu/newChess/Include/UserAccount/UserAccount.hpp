@@ -3,7 +3,7 @@
 
 #include <string>
 #include <optional>
-#include <Menu_Invoker.hpp>
+#include <Menu.hpp>
 
 //Aliases
 using Password = std::pair<std::string, int>;
@@ -18,8 +18,6 @@ class UserAccount{
     /*private:
     std::optional<UserAccount&> doesAccountExist(Password&);*/
     private:
-    MenuInvoker m_userAccountMenuInvoker;
-    Options m_userAccountOptions{};
     Password m_password{};
     std::string m_name{};
 };
