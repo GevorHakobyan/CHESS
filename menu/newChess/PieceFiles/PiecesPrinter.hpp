@@ -8,8 +8,12 @@
 class PiecesPrinter {
     public:
     PiecesPrinter() = default;
-    static void print(const SquareIdentity&);
-    static void printPiece(const wchar_t*, std::pair<int, int>);
+    void print(const SquareIdentity&);
+    static void printPiece(const wchar_t*, const Location&);
+    private:
+    void getLocation(Location&, const SquareIdentity&, int);
+    void setPieceMap(Location&);
+    static Index m_pieceIndex;
 };
 
 #endif

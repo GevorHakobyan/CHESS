@@ -71,3 +71,6 @@ const PieceList& Board::getPieceList() const {
     return m_pieceList;
 }
 
+void Board::setMap(Location& pieceLocation, Index& pieceIndexes) {
+    m_PieceMap[pieceLocation] = pieceIndexes;
+}
