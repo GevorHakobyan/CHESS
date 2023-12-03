@@ -25,14 +25,8 @@ void PiecesPrinter::print(const SquareIdentity& identities) {
             ++index;
         }
     }
-    move(0, 0);
-    //location.first = std::get<0>(identities[8]);
-    //location.second = std::get<1>(identities[8]);
-    printw("%d", myBoard->m_PieceMap[location].first);
-    printw("%d", myBoard->m_PieceMap[location].second);
+    myBoard = nullptr;
 }
-
-
 
 void PiecesPrinter::printPiece(const wchar_t* piece, const Location& location) {
     move (location.first - 1, location.second - 4); 

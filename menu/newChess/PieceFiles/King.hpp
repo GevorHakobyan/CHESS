@@ -5,8 +5,9 @@
 
 class King : public Piece {
     public:
-    King() = default;
-    King(std::string, const wchar_t*);
+    King(const std::string& color, const wchar_t* character, Location currentLocaton);
+    void updateAvailableCoordinates() override;
+    void setAvailableCoordinates() override;
 };
 
 #endif

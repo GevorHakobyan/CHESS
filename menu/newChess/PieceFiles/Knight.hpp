@@ -5,8 +5,9 @@
 
 class Knight : public Piece {
     public:
-    Knight() = default;
-    Knight(std::string, const wchar_t*);
+    Knight(const std::string& color, const wchar_t*, Location startLocation);
+    void updateAvailableCoordinates() override;
+    void setAvailableCoordinates() override;
 };
 
 #endif

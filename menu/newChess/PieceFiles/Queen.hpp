@@ -5,8 +5,9 @@
 
 class Queen : public Piece {
     public:
-    Queen() = default;
-    Queen(std::string, const wchar_t*);
+    Queen(const std::string& color, const wchar_t*, Location startLocation);
+    void updateAvailableCoordinates() override;
+    void setAvailableCoordinates() override;
 };
 
 #endif

@@ -5,7 +5,9 @@
 
 class Rook : public Piece {
     public:
-    Rook(std::string, const wchar_t*);
+    Rook(const std::string&, const wchar_t*, Location);
+    void updateAvailableCoordinates() override;
+    void setAvailableCoordinates() override;
     private:
 };
 

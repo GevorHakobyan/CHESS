@@ -5,8 +5,9 @@
 
 class Bishop : public Piece {
     public:
-    Bishop() = default;
-    Bishop(std::string, const wchar_t*);
+    Bishop(const std::string& color, const wchar_t*, Location startLocation);
+    void updateAvailableCoordinates() override;
+    void setAvailableCoordinates() override;
 };
 
 #endif

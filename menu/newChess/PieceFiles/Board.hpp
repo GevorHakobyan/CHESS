@@ -28,6 +28,6 @@ class Board {
     void setWhitePieces();
     void setBlackPieces();
     static Board* m_Board;
-    PieceList m_pieceList{};
+    PieceList m_pieceList;
 };
 #endif
