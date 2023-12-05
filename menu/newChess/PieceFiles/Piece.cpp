@@ -69,6 +69,10 @@ void Piece::SwapWithThis(Piece& other) {
     std::swap(this->m_color, tmpCol);  
 } 
 
+AvailableCoordinates Piece::getAvailableCoordinates() const {
+    return m_Avialble_Coordinates;
+}
+
 void Piece::updateAvailableCoordinates() {
     return;
 }

@@ -8,6 +8,7 @@
 #include "Pawn.hpp"
 #include "Queen.hpp"
 #include "Rook.hpp"
+//#include "AvailableCoordinatesHandler.hpp"
 #include <map>
 #include <vector>
 
@@ -21,7 +22,9 @@ class Board {
     Board(Board&) =  delete;
     Board& operator=(const Board&) = delete;
     const PieceList& getPieceList() const;
+    void move();
     void setMap(Location&, Index&);
+    std::pair<bool, Color> isEmpty(Location);
     std::map<Location, Index> m_PieceMap;
     private:
     Board();

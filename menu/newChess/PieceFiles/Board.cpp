@@ -94,3 +94,16 @@ const PieceList& Board::getPieceList() const {
 void Board::setMap(Location& pieceLocation, Index& pieceIndexes) {
     m_PieceMap[pieceLocation] = pieceIndexes;
 }
+
+void Board::move() {
+    
+}
+
+std::pair<bool, Color> Board::isEmpty(Location specifiedLocation) {
+    const auto[i, j] = m_PieceMap[specifiedLocation];
+    if(m_pieceList[i][j]->getUnicodeCharacter() == nullptr) {
+        return {true, Color::Unknown};
+    }
+    Color pieceColor = m_pieceList[i][j]->getColor();
+    return {false, pieceColor};
+}

@@ -11,7 +11,7 @@ void Pawn::updateAvailableCoordinates() {
 
     AvailableCoordinates updatedCoordinates;  
 
-    //updatedCoordinates = y - 2 < BoardMatrixSize? standardUpdate(currentLocation) : updateWithChecks(currentLocation).value();
+    updatedCoordinates = y - 2 < BoardMatrixSize ? standardUpdate(currentLocation) : updateWithChecks(currentLocation).value();
     m_Avialble_Coordinates = std::move(updatedCoordinates);
 }
 

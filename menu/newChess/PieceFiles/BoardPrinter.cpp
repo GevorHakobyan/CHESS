@@ -11,12 +11,14 @@ void BoardPrinter::Print() {
     setlocale(LC_ALL, "");
     start_color();
     init_pair(1, COLOR_BLACK, COLOR_YELLOW);
+    
     bkgd(COLOR_PAIR(1));
     box(stdscr, 0, 0);
     printMatrix();
     printColumLetter();
     PiecesPrinter piecePrinter;
     piecePrinter.print(m_board->getSquaresIdentity());
+
     refresh();
     getch();
     endwin();

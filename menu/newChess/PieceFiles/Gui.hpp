@@ -8,6 +8,7 @@
 class Gui{  
     public: 
     void drawBoard();
+    void Play();
 };
 
 #endif

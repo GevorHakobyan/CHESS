@@ -30,6 +30,7 @@ class Piece {
     void setColor(const std::string&);
     Color getColor() const;
 
+    virtual AvailableCoordinates getAvailableCoordinates() const; 
     protected:
     virtual void updateAvailableCoordinates();
     virtual void setAvailableCoordinates();
