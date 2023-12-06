@@ -6,6 +6,10 @@ void PiecesPrinter::getLocation(Location& location, const SquareIdentity& identi
      location.second = std::get<1>(identities[index]);
 }
 
+void PiecesPrinter::setBoardMap(Location& location, Board* myBoard) {
+     myBoard->setMap(location, m_pieceIndex);
+}
+
 void PiecesPrinter::print(const SquareIdentity& identities) {
     Board* myBoard{Board::getInstance()}; //what will happen if I use smart pointer??
     const PieceList& myList{myBoard->getPieceList()};
@@ -17,8 +21,10 @@ void PiecesPrinter::print(const SquareIdentity& identities) {
         for (int j{0}; j < 8; ++j) {
             m_pieceIndex.first = i;
             m_pieceIndex.second = j;
+        
             getLocation(location, identities, index);
-            myBoard->setMap(location, m_pieceIndex);
+            setBoardMap(location, myBoard);
+
             if (myList[i][j] != nullptr) {
                 printPiece(myList[i][j]->getUnicodeCharacter(), location);
             }
@@ -29,6 +35,6 @@ void PiecesPrinter::print(const SquareIdentity& identities) {
 }
 
 void PiecesPrinter::printPiece(const wchar_t* piece, const Location& location) {
-    move (location.first - 1, location.second - 4); 
+    move (location.first - 1, location.second - 3); 
     addwstr(piece);
 }

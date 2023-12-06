@@ -6,6 +6,15 @@ void StartRowWithWhite(Row&);
 void fillBlack(Square&);
 void fillWhite(Square&);
 
+BoardView* BoardView::m_BoardView = nullptr;
+
+BoardView* BoardView::getInstance() {
+    if (m_BoardView == nullptr) {
+        m_BoardView = new BoardView(8, 8);
+    }
+    return m_BoardView; 
+}
+
 BoardView::BoardView(int rows, int colums)
 : m_colums{colums}, m_rows{rows}  
 {
@@ -79,6 +88,6 @@ void BoardView::setSquareIdentity(std::tuple<int, int, int> value) {
     m_squaresIdentity[std::get<2>(value)] = value;
 }
 
-const SquareIdentity& BoardView::getSquaresIdentity() const {
+const SquareIdentity& BoardView::getSquaresIdentities() const {
     return m_squaresIdentity;
 }

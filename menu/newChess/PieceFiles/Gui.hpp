@@ -3,7 +3,7 @@
 #include "Board.hpp"
 #include "BoardPrinter.hpp"
 #include "PiecesPrinter.hpp"
-//#include "PieceFactory.hpp"
+#include "MouseHandler.hpp"
 
 class Gui{  
     public: 

@@ -25,11 +25,12 @@ class Board {
     void move();
     void setMap(Location&, Index&);
     std::pair<bool, Color> isEmpty(Location);
-    std::map<Location, Index> m_PieceMap;
+
     private:
     Board();
     void setWhitePieces();
     void setBlackPieces();
+    std::map<Location, Index> m_PieceMap;
     static Board* m_Board;
     PieceList m_pieceList;
 };

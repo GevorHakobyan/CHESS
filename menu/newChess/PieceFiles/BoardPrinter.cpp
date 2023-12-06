@@ -1,27 +1,29 @@
 #include "BoardPrinter.hpp"
 void printRowNumber(int);
 
-BoardPrinter::BoardPrinter(BoardView& myBoard) {
-    m_board = std::make_unique<BoardView>(myBoard);
-    m_boardSize = myBoard.getBoard().size();
+BoardPrinter::BoardPrinter(BoardView* myBoard) {
+    m_board = myBoard;
+    m_boardSize = myBoard->getBoard().size();
 }
 
 void BoardPrinter::Print() {
-    initscr();
+    /*initscr();
     setlocale(LC_ALL, "");
     start_color();
     init_pair(1, COLOR_BLACK, COLOR_YELLOW);
     
     bkgd(COLOR_PAIR(1));
-    box(stdscr, 0, 0);
+    box(stdscr, 0, 0);*/
     printMatrix();
     printColumLetter();
     PiecesPrinter piecePrinter;
-    piecePrinter.print(m_board->getSquaresIdentity());
+    piecePrinter.print(m_board->getSquaresIdentities());
 
+    /*MouseHandler handler;
+    handler.HandleClick();
     refresh();
     getch();
-    endwin();
+    endwin();*/
 }
 
 void BoardPrinter::printMatrix() {
@@ -57,13 +59,13 @@ void BoardPrinter::printSquareLine(std::array<const wchar_t*, 3>& line, int line
         addwstr(L" ");
     }
 
-    if (lineNumber == 2) {
+    int lastLine{2};
+    if (lineNumber == lastLine) {
         setCursorLocation();
         setSquareLocations(lineNumber);
     }
 
     addwstr(L" ");
-    
 }
 
 void BoardPrinter::printColumLetter() {
@@ -94,13 +96,13 @@ CursorPositon BoardPrinter::getCursorLocation() {
 }
 
 void BoardPrinter::setSquareLocations(int index) {
-    std::tuple<int, int, int> squareIdentity = std::make_tuple(m_cursor.first, m_cursor.second, m_activeSquare);
+    std::tuple<int, int, int> squareIdentity = std::make_tuple(m_cursor.first, m_cursor.second - 1, m_activeSquare);
     ++m_activeSquare;
     m_board->setSquareIdentity(squareIdentity);
 }
 
 void BoardPrinter::printPeaces() {
-    SquareIdentity identities = m_board->getSquaresIdentity();
+    SquareIdentity identities = m_board->getSquaresIdentities();
     std::tuple<int, int, int> identity = identities[0];
 
     int y = std::get<0>(identity);

@@ -15,8 +15,9 @@ using SquareIdentity = std::array<std::tuple<int, int, int>, 64>;
 
 class BoardView {
     public:
-    BoardView() = default;
-    BoardView(int colums, int rows);
+    static BoardView* getInstance();
+    BoardView(BoardView&) =  delete;
+    BoardView& operator=(const BoardView&) = delete;
     BoardMatrix getBoard() const;
     Letters getLetters() const;
     Numbers getNumbers() const;
@@ -24,10 +25,12 @@ class BoardView {
     void fillLetters();
     void fillNumbers();
     void setSquareIdentity(std::tuple<int, int, int>);
-    const SquareIdentity& getSquaresIdentity() const;
+    const SquareIdentity& getSquaresIdentities() const;
    
 
     private: 
+    BoardView(int colums, int rows);
+    static BoardView* m_BoardView;
     BoardMatrix m_board {8, Row(8)};
     int m_colums{0};
     int m_rows{0};

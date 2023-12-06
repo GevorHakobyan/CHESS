@@ -12,7 +12,7 @@ class PiecesPrinter {
     static void printPiece(const wchar_t*, const Location&);
     private:
     void getLocation(Location&, const SquareIdentity&, int);
-    void setPieceMap(Location&);
+    void setBoardMap(Location&, Board*);
     static Index m_pieceIndex;
 };
 
