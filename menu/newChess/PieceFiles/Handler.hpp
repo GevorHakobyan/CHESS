@@ -2,12 +2,12 @@
 #define HANDLER_HPP
 
 #include "Piece.hpp"
-#include "Board.hpp"
+///#include "Board.hpp"
 
 class Handler {
     public:
     virtual Handler* setNextHandler(Handler*) = 0;
-    virtual bool handleRequest() = 0;
+    virtual bool handleRequest(const Piece&, const Location&) = 0;
 };
 
 #endif

@@ -8,6 +8,11 @@ class Bishop : public Piece {
     Bishop(const std::string& color, const wchar_t*, Location startLocation);
     void updateAvailableCoordinates() override;
     void setAvailableCoordinates() override;
+    private:
+    void setRightUpCoordinates();
+    void setLeftUpCoordinates();
+    void setRightDownCoordinates();
+    void setLeftDownCoordinates();
 };
 
 #endif

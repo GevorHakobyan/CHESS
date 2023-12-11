@@ -7,7 +7,7 @@ void Gui::drawBoard() {
 }
 
 void Gui::Play() {
-    MouseHandler handler;
-    handler.HandleClicks();
+    MouseHandler* mouseHandler{MouseHandler::getInstance()};
+    mouseHandler->HandleClicks();
 }
 

@@ -14,5 +14,5 @@ bool DesiredSquare_Handler::isEmpty() {
 
 bool DesiredSquare_Handler::isEnemy() {
      Board* myBoard{Board::getInstance()}; 
-     return myBoard->isEmpty(m_desiredLocation).second == m_Piece.getColor() ? false : true;
+     return myBoard->isEmpty(m_desiredLocation).second == m_Piece->getColor() ? false : true;
 }

@@ -25,25 +25,41 @@ void MouseHandler::setActiveLocation(Location active) {
 void MouseHandler::HandleClicks () {
     keypad(stdscr, TRUE);
     mousemask(ALL_MOUSE_EVENTS, NULL);
-    int input;
+    Board* mainBoard{Board::getInstance()};
+    int firstinput;
+    int secondInput;
+    Location origin;
+    Location destination;
+    const PieceList& PieceList = mainBoard->getPieceList();
+
+
+
      while (true) {
-        moveMouse(input);
-        if (input == 'q') {
+        getOrigin(firstinput, origin);
+        getDestination(secondInput, destination);
+       /* move(5, 0);
+        printw("%d", origin.first);
+        move(5, 3);
+        printw("%d", destination.first);*/
+        mainBoard->movePiece(origin, destination);
+        if (firstinput == 'q' || secondInput == 'q') {
             break;
         }
     }  
 }
 
-void MouseHandler::moveMouse(int& input) {
+void MouseHandler::moveMouse(int& input, Location& esim) {
     MEVENT event;
     input = getch();
+    Location clicked{0, 0};
     if (input == KEY_MOUSE) {
         if (getmouse(&event) == OK) {
-                if (event.bstate & BUTTON1_CLICKED) {
-                Location clicked{event.y, event.x};
-                setActiveLocation(clicked);
-                SearchSquare();
-                move(m_specifedSquare.first, m_specifedSquare.second);
+            if (event.bstate & BUTTON1_CLICKED) {
+                    clicked.first = event.y;
+                    clicked.second = event.x;
+                    setActiveLocation(clicked);
+                    SearchSquare();
+                    esim = m_specifedSquare;
             }
         } 
         refresh();
@@ -86,7 +102,7 @@ int MouseHandler::Search(const int point) {
     int interval{7};
     int index{0};
     int difference{0};
-    std::vector<int>& coordinates = point >= 70 ? m_Xcoordinates : m_Ycoordinates;
+    std::vector<int>& coordinates = point >= 65 ? m_Xcoordinates : m_Ycoordinates;
 
     for (int i{0}; i < coordinates.size(); ++i) { 
         difference = (coordinates[i] - point);
@@ -112,4 +128,12 @@ bool MouseHandler::isInMiddleOfSquares(int i, int point, const std::vector<int>&
         return true;
     }
     return false;
+}
+
+void MouseHandler::getOrigin(int& input, Location& origin) {
+    moveMouse(input, origin);
+}
+
+void MouseHandler::getDestination(int& input, Location& destination) {
+    moveMouse(input, destination);
 }

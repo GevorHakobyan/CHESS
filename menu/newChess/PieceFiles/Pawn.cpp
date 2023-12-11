@@ -2,7 +2,15 @@
 #include <optional>
 
 Pawn::Pawn(const std::string& color, const wchar_t* character, Location startLocation)
- : Piece(color, character, startLocation) {};
+ : Piece(color, character, startLocation) 
+ {
+    setAvailableCoordinates();
+ };
+
+ PawnPosition Pawn::detectPosition() {
+    const auto[y, x] = m_Current_Location;
+    return y == 6 ? PawnPosition::Down : PawnPosition::Up;
+ }
 
 void Pawn::updateAvailableCoordinates() {
     auto[y, x] = getCurrentLocation();
@@ -16,9 +24,11 @@ void Pawn::updateAvailableCoordinates() {
 }
 
 void Pawn::setAvailableCoordinates() {
+    int step{-1};
+    step = (detectPosition() == PawnPosition::Up) ? 1 : -1;
     auto[y, x] = m_Current_Location;
-    Location coordinate1{y + 1, x};
-    Location coordinate2{y + 2, x};
+    Location coordinate1{y + step, x};
+    Location coordinate2{y + 2 * step, x};
 
     m_Avialble_Coordinates.push_back(coordinate1);
     m_Avialble_Coordinates.push_back(coordinate2);

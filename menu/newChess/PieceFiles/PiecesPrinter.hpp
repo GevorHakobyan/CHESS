@@ -10,6 +10,7 @@ class PiecesPrinter {
     PiecesPrinter() = default;
     void print(const SquareIdentity&);
     static void printPiece(const wchar_t*, const Location&);
+    static void printAvailables();
     private:
     void getLocation(Location&, const SquareIdentity&, int);
     void setBoardMap(Location&, Board*);

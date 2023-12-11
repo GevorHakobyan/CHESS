@@ -8,6 +8,12 @@ class Knight : public Piece {
     Knight(const std::string& color, const wchar_t*, Location startLocation);
     void updateAvailableCoordinates() override;
     void setAvailableCoordinates() override;
+    private:
+    void setUpRight();
+    void setUpLeft();
+    void setDownRight();
+    void setDownLeft();
+    bool doesExist(Location);
 };
 
 #endif

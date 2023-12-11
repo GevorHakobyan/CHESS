@@ -2,6 +2,7 @@
 #define DESIRE_SQUARE_HANDLER
 
 #include "AbstractHandler.hpp"
+#include "Board.hpp"
 #include <memory>
 
 class DesiredSquare_Handler : public AbstractHandler {

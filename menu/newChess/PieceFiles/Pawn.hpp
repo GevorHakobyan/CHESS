@@ -5,11 +5,14 @@
 #include "Piece.hpp"
 #include <optional>
 
+enum class PawnPosition{Up, Down};
+
 class Pawn : public Piece{
     public:
     Pawn(const std::string& color, const wchar_t*, Location startLocation);
     private:
     private: //Methods
+    PawnPosition detectPosition();
     void updateAvailableCoordinates() override; 
     AvailableCoordinates standardUpdate(Location);
     std::optional<AvailableCoordinates> updateWithChecks(Location);

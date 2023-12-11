@@ -9,8 +9,18 @@ Board* Board::getInstance() {
 }
 
 Board::Board() {
+    m_ExistanceHandler = new PieceExistanceHandler;
+    m_AvailableHandler = new AvailableCoordinates_Handler;
+    m_ExistanceHandler->setNextHandler(m_AvailableHandler);
     setWhitePieces();
     setBlackPieces();
+}
+
+Board::~Board() {
+    delete m_ExistanceHandler;
+    m_ExistanceHandler = nullptr;
+    delete m_AvailableHandler;
+    m_AvailableHandler = nullptr;
 }
 
 void Board::setWhitePieces() {
@@ -31,7 +41,7 @@ void Board::setWhitePieces() {
     startLocation.second = 2;
     m_pieceList[0][2].reset(new Bishop(color, mychar, startLocation));
     startLocation.second = 5;
-    m_pieceList[0][5].reset(new Bishop(color, mychar, startLocation));
+    m_pieceList[0][5].reset(new Bishop(color, mychar,startLocation));
     
     mychar = L"\u265B";
     startLocation.second = 3;
@@ -52,7 +62,7 @@ void Board::setWhitePieces() {
 void Board::setBlackPieces() {
     std::string color = "Black";
     size_t endIndex{m_pieceList.size() - 1};
-    Location startLocation{63, 0};
+    Location startLocation{7, 0};
 
     const wchar_t* mychar = L"\u2656";
     m_pieceList[endIndex][0].reset(new Rook(color, mychar, startLocation));
@@ -80,7 +90,7 @@ void Board::setBlackPieces() {
     m_pieceList[endIndex][4].reset(new King(color, mychar, startLocation));
     
     mychar = L"\u2659";
-    startLocation.first = 62;
+    startLocation.first = 6;
     for (int i{0}; i < 8; ++i) {
         startLocation.second = i;
         m_pieceList[endIndex - 1][i].reset(new Pawn(color, mychar, startLocation));
@@ -95,8 +105,13 @@ void Board::setMap(Location& pieceLocation, Index& pieceIndexes) {
     m_PieceMap[pieceLocation] = pieceIndexes;
 }
 
-void Board::move() {
-    
+void Board::movePiece(Location origin, Location destination) {
+    if (isZero(origin, destination)) {
+        return;
+    } 
+    const auto[y, x] = m_PieceMap[origin];
+    destination = m_PieceMap[destination];
+    m_ExistanceHandler->handleRequest(*m_pieceList[y][x], destination);
 }
 
 std::pair<bool, Color> Board::isEmpty(Location specifiedLocation) {
@@ -106,4 +121,9 @@ std::pair<bool, Color> Board::isEmpty(Location specifiedLocation) {
     }
     Color pieceColor = m_pieceList[i][j]->getColor();
     return {false, pieceColor};
+}
+
+bool Board::isZero(const Location& origin, const Location& destination) {
+   return  (0 == origin.first || 0 == origin.second) ? true : false;
+   return  (0 == destination.first || 0 == destination.second) ? true : false;
 }

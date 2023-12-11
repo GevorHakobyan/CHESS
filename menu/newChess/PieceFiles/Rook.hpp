@@ -9,6 +9,8 @@ class Rook : public Piece {
     void updateAvailableCoordinates() override;
     void setAvailableCoordinates() override;
     private:
+    void setRowCoordinates();
+    void setColumCoordinates();
 };
 
 #endif

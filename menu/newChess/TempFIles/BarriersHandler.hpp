@@ -1,13 +1,17 @@
 #ifndef BARRIERS_HANDLER_HPP
 #define BARRIERS_HANDLER_HPP
 
-#include "AbstractHandler.hpp"
+
 #include <memory>
+#include "Board.hpp"
+#include "AbstractHandler.hpp"
+
+class Board;
 
 class Barriers_Handler : public AbstractHandler {
     public:
-    Barriers_Handler(const Piece&, const Location);
-    bool handleRequest() override;
+    Barriers_Handler();
+    bool handleRequest(const Piece&, const Location&) override;
     private:
     bool isHorse();
    

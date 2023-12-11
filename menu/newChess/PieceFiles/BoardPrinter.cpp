@@ -7,23 +7,11 @@ BoardPrinter::BoardPrinter(BoardView* myBoard) {
 }
 
 void BoardPrinter::Print() {
-    /*initscr();
-    setlocale(LC_ALL, "");
-    start_color();
-    init_pair(1, COLOR_BLACK, COLOR_YELLOW);
-    
-    bkgd(COLOR_PAIR(1));
-    box(stdscr, 0, 0);*/
     printMatrix();
     printColumLetter();
     PiecesPrinter piecePrinter;
     piecePrinter.print(m_board->getSquaresIdentities());
-
-    /*MouseHandler handler;
-    handler.HandleClick();
-    refresh();
-    getch();
-    endwin();*/
+    //piecePrinter.printAvailables();
 }
 
 void BoardPrinter::printMatrix() {
@@ -62,7 +50,7 @@ void BoardPrinter::printSquareLine(std::array<const wchar_t*, 3>& line, int line
     int lastLine{2};
     if (lineNumber == lastLine) {
         setCursorLocation();
-        setSquareLocations(lineNumber);
+        setSquareLocations();
     }
 
     addwstr(L" ");
@@ -95,19 +83,8 @@ CursorPositon BoardPrinter::getCursorLocation() {
     return m_cursor;
 }
 
-void BoardPrinter::setSquareLocations(int index) {
+void BoardPrinter::setSquareLocations() {
     std::tuple<int, int, int> squareIdentity = std::make_tuple(m_cursor.first, m_cursor.second - 1, m_activeSquare);
     ++m_activeSquare;
     m_board->setSquareIdentity(squareIdentity);
-}
-
-void BoardPrinter::printPeaces() {
-    SquareIdentity identities = m_board->getSquaresIdentities();
-    std::tuple<int, int, int> identity = identities[0];
-
-    int y = std::get<0>(identity);
-    int x = std::get<1>(identity);
-
-    move(y - 1, x - 4);
-    addwstr(L"\u265C");
 }

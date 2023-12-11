@@ -80,3 +80,15 @@ void Piece::updateAvailableCoordinates() {
 void Piece::setAvailableCoordinates() {
     return;
 }
+
+bool Piece::operator==(const Piece& other) {
+    if (this->m_Current_Location != other.getCurrentLocation()) {
+        return false;
+    } 
+
+    if (this->getUnicodeCharacter() != other.getUnicodeCharacter()) {
+        return false;
+    }
+
+    return true; 
+}

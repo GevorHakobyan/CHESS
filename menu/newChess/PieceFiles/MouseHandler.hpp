@@ -2,15 +2,16 @@
 #define MOUSE_HANDLER
 
 #include "PiecesPrinter.hpp"
+
 class MouseHandler {
     public:
     MouseHandler(); 
-    static MouseHandler* getInstance();
-    Location getSquare();
-    private:
+    static MouseHandler* getInstance();  
     void HandleClicks();
+    private: 
+    Location getSquare();
     void SearchSquare();
-    void moveMouse(int&);
+    void moveMouse(int&, Location&);
     void SearchXcoordinate();
     void SearchYcoodinate();
     void setXcoordinates();
@@ -18,6 +19,8 @@ class MouseHandler {
     int Search(const int);
     void setActiveLocation(Location);
     bool isInMiddleOfSquares(int, int, const std::vector<int>&);
+    void getOrigin(int&, Location&);
+    void getDestination(int&, Location&);
     private:
     Location m_activeLocation;
     Location m_specifedSquare;

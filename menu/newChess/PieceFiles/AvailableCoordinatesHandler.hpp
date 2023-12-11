@@ -3,11 +3,11 @@
 
 
 #include "AbstractHandler.hpp"
-
+#include <ncurses.h>
 class AvailableCoordinates_Handler : public AbstractHandler {
     public:
-    AvailableCoordinates_Handler(const Piece&, const Location);
-    bool handleRequest() override;
+    AvailableCoordinates_Handler();
+    bool handleRequest(const Piece&, const Location&) override;
 };
 
 #endif

@@ -19,7 +19,8 @@ class Piece {
     Piece(Piece& other) noexcept; 
     Piece(Piece&&) noexcept;
     Piece& operator=(Piece&) noexcept;
-    Piece& operator=(Piece&&) noexcept;
+    Piece& operator=(Piece&&) noexcept;  
+    bool operator==(const Piece&);
 
     void setCurrentLocation(Location);
     Location getCurrentLocation() const;
@@ -29,12 +30,13 @@ class Piece {
 
     void setColor(const std::string&);
     Color getColor() const;
-
+    virtual void updateAvailableCoordinates();
     virtual AvailableCoordinates getAvailableCoordinates() const; 
     protected:
-    virtual void updateAvailableCoordinates();
+   
     virtual void setAvailableCoordinates();
     void SwapWithThis(Piece&);
+  
 
     protected:
     Location m_Current_Location{};

@@ -20,11 +20,10 @@ class BoardPrinter{
     void printMatrix(); 
     void printRowNumber(int);
     void printColumLetter();
-    void printPeaces();
 
     void setCursorLocation();
     CursorPositon getCursorLocation();
-    void setSquareLocations(int);
+    void setSquareLocations();
 
     private:
     BoardView* m_board{nullptr};

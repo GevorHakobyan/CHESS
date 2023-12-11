@@ -5,13 +5,11 @@
 
 class AbstractHandler : public Handler {
     public:
-    AbstractHandler(const Piece&, Location);
+    AbstractHandler() = default;
     Handler* setNextHandler(Handler*) override;
-    bool handleRequest() override;
+    bool handleRequest(const Piece&, const Location&) override;
     protected:
     Handler* m_nextHandler{nullptr};
-    const Piece& m_Piece;
-    Location m_desiredLocation;
 };
 
 #endif

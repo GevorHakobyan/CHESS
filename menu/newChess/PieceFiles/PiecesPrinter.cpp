@@ -30,11 +30,24 @@ void PiecesPrinter::print(const SquareIdentity& identities) {
             }
             ++index;
         }
-    }
+    } 
+
     myBoard = nullptr;
 }
 
 void PiecesPrinter::printPiece(const wchar_t* piece, const Location& location) {
     move (location.first - 1, location.second - 3); 
     addwstr(piece);
+}
+void PiecesPrinter::printAvailables() {
+    Board* myBoard{Board::getInstance()}; //what will happen if I use smart pointer??
+    const PieceList& myList{myBoard->getPieceList()};
+    const AvailableCoordinates& myref = myList[1][0]->getAvailableCoordinates();
+    move(10, 0);
+   for (int i{0}; i < myref.size(); ++i) {
+        printw("%d", myref[i].first);
+        printw(" ");
+        printw("%d", myref[i].second);
+        printw("\n");
+    }
 }
