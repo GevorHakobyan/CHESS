@@ -1,32 +1,32 @@
-#ifndef CHESS_CONTROLLER_HPP
-#define CHESS_CONTROLLER_HPP
+#ifndef CHESS_MODEL_HPP
+#define CHESS_MODEL_HPP
 
 #include "Board.hpp"
-#include "PiecesPrinter.hpp"
-#include "BoardView.hpp"
 #include "PieceExistanceHandler.hpp"
 #include "AvailableCoordinatesHandler.hpp"
 #include "BarriersHandler.hpp"
 #include "desiredSquareHandler.hpp"
 
 using MAP = std::map<Location, Index>&;
+using MoveIndexes = std::pair<Index, Index>;
 
-class Controller {
+class Model {
     public:
-    static Controller* getInstance();
-    Controller& operator=(const Controller&) = delete;
-    Controller(const Controller&) = delete;
+    static Model* getInstance();
+    Model& operator=(const Model&) = delete;
+    Model(const Model&) = delete;
     void Move(const Location&, Location&);
+    void setMoveIndexes(Index&, Index&);
+    MoveIndexes getMoveIndexes() const;
 
     private:
     bool isZero(const Location&, const Location&);
-    void updateBoardView(const Location&, const Location&);
     void updateBoardMatrix(Index&, Index&);
     void updateMap(Location&, Index&);
 
     private:
-    static Controller* m_Controller;
-    Controller();
+    static Model* m_Model;
+    Model();
     Board* m_Board{nullptr};
     MAP m_pieceMap;
     PieceList& m_pieceList;
@@ -34,5 +34,7 @@ class Controller {
     AvailableCoordinates_Handler* m_AvailableHandler{nullptr};
     Barriers_Handler* m_BarriersHandler{nullptr};
     DesiredSquare_Handler* m_DesiredHandler{nullptr};
+    Index m_Target_Prev_Index;
+    Index m_Target_New_Index;
 };
-#endif //CHESS_CONTROLLER_HPP
+#endif //CHESS_MODEL_HPP

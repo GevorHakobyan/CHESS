@@ -18,7 +18,6 @@ MouseHandler::MouseHandler()
   {
     setXcoordinates();
     setYcoordinates();
-    m_Controller = Controller::getInstance();
   };
 
 void MouseHandler::setActiveLocation(Location active) {
@@ -40,9 +39,7 @@ void MouseHandler::HandleClicks () {
         return;
     }
     refresh();
-    //fakeDelay();
-     
-    m_Controller->Move(origin, destination);
+    sendIfo(origin, destination);
 }
 
 void MouseHandler::moveMouse(Location& clicked) {
@@ -128,7 +125,7 @@ bool MouseHandler::isOutOfBoard() {
     if (y > maxY || y < minY) {
         return true;
     }
-    
+
     return false;
 }
 bool MouseHandler::getOrigin(Location& origin, MEVENT& event) {
@@ -162,4 +159,8 @@ bool MouseHandler::findDemandedLocation(Location& demandedLocation, MEVENT& even
 void fakeDelay() {
     int input = getch();
     return;
+}
+
+void MouseHandler::sendIfo(Location& origin, Location& destination) {
+    Controller::getInputFrom_User(origin, destination);
 }

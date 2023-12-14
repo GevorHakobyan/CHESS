@@ -10,9 +10,9 @@ int main() {
     
     bkgd(COLOR_PAIR(1));
     box(stdscr, 0, 0);
-    Gui myGui;
-    myGui.drawBoard();
-    myGui.Play();
+    Gui* myGui{Gui::getInstance()};
+    myGui->drawBoard();
+    myGui->Play();
     refresh();
     getch();
     endwin();

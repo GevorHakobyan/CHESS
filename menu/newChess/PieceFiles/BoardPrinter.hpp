@@ -1,11 +1,9 @@
 #ifndef BOARD_PRINTER_HPP
 #define BOARD_PRINTER_HPP
 
-#include "BoardView.hpp"
 #include <memory>
 #include <optional>
 #include "PiecesPrinter.hpp"
-#include "MouseHandler.hpp"
 
 using CursorPositon = std::pair<int, int>;
 

@@ -1,8 +1,7 @@
 #ifndef MOUSE_HANDLER
 #define MOUSE_HANDLER
 
-#include "PiecesPrinter.hpp"
-#include "Controller.hpp"
+#include "Contoller.hpp"
 
 class MouseHandler {
     public:
@@ -25,9 +24,9 @@ class MouseHandler {
     bool getOrigin(Location&, MEVENT&);
     bool getDestination(Location&, MEVENT&);
     bool findDemandedLocation(Location&, MEVENT&, int&);
+    void sendIfo(Location&, Location&);
     
     private:
-    Controller* m_Controller{nullptr};
     Location m_activeLocation;
     Location m_specifedSquare;
     const SquareIdentity& m_identaties;
