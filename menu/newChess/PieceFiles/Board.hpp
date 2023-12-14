@@ -1,8 +1,6 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
 
-class BarriersHandler;
-
 #include "Knight.hpp"
 #include "Piece.hpp"
 #include "Bishop.hpp"
@@ -11,10 +9,6 @@ class BarriersHandler;
 #include "Queen.hpp"
 #include "Rook.hpp"
 #include <ncurses.h>
-///#include "AbstractHandler.hpp"
-//#include "BarriersHandler.hpp"
-#include "AvailableCoordinatesHandler.hpp"
-#include "PieceExistanceHandler.hpp"
 #include <map>
 #include <vector>
 
@@ -27,13 +21,13 @@ class Board {
     static Board* getInstance();
     Board(Board&) =  delete;
     Board& operator=(const Board&) = delete;
-    const PieceList& getPieceList() const;
-    void movePiece(Location, Location);
+    PieceList& getPieceList();
     void setMap(Location&, Index&);
-    std::pair<bool, Color> isEmpty(Location);
+    std::map<Location, Index>& getPieceMap();
     std::map<Location, Index> m_PieceMap;
-    bool isZero(const Location&, const Location&);
-    private:
+    std::pair<bool, Color> isEmpty(Index);
+
+    private: 
     ~Board();
     Board();
     void setWhitePieces();
@@ -41,7 +35,5 @@ class Board {
     
     static Board* m_Board;
     PieceList m_pieceList;
-    PieceExistanceHandler* m_ExistanceHandler{nullptr};
-    AvailableCoordinates_Handler* m_AvailableHandler{nullptr};
 };
-#endif
+#endif 

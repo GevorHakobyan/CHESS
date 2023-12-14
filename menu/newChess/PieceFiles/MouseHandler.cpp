@@ -1,7 +1,8 @@
 #include "MouseHandler.hpp"
-#include <math.h>
+
 
 MouseHandler* MouseHandler::m_mouseHandler = nullptr;
+void fakeDelay();
 
 MouseHandler* MouseHandler::getInstance() {
     if (nullptr == m_mouseHandler) {
@@ -9,6 +10,7 @@ MouseHandler* MouseHandler::getInstance() {
     }
     return m_mouseHandler;
 }
+
 MouseHandler::MouseHandler() 
 : m_activeLocation{std::make_pair<int, int>(0, 0)}, 
   m_specifedSquare{std::make_pair<int, int>(0 , 0)},
@@ -16,6 +18,7 @@ MouseHandler::MouseHandler()
   {
     setXcoordinates();
     setYcoordinates();
+    m_Controller = Controller::getInstance();
   };
 
 void MouseHandler::setActiveLocation(Location active) {
@@ -25,50 +28,32 @@ void MouseHandler::setActiveLocation(Location active) {
 void MouseHandler::HandleClicks () {
     keypad(stdscr, TRUE);
     mousemask(ALL_MOUSE_EVENTS, NULL);
-    Board* mainBoard{Board::getInstance()};
-    int firstinput;
-    int secondInput;
     Location origin;
     Location destination;
-    const PieceList& PieceList = mainBoard->getPieceList();
-
-
-
-     while (true) {
-        getOrigin(firstinput, origin);
-        getDestination(secondInput, destination);
-       /* move(5, 0);
-        printw("%d", origin.first);
-        move(5, 3);
-        printw("%d", destination.first);*/
-        mainBoard->movePiece(origin, destination);
-        if (firstinput == 'q' || secondInput == 'q') {
-            break;
-        }
-    }  
-}
-
-void MouseHandler::moveMouse(int& input, Location& esim) {
     MEVENT event;
-    input = getch();
-    Location clicked{0, 0};
-    if (input == KEY_MOUSE) {
-        if (getmouse(&event) == OK) {
-            if (event.bstate & BUTTON1_CLICKED) {
-                    clicked.first = event.y;
-                    clicked.second = event.x;
-                    setActiveLocation(clicked);
-                    SearchSquare();
-                    esim = m_specifedSquare;
-            }
-        } 
-        refresh();
-    }      
+
+    if (!getOrigin(origin, event)) {
+        return;
+    }
+    refresh();
+    if (!getDestination(destination, event)) {
+        return;
+    }
+    refresh();
+    //fakeDelay();
+     
+    m_Controller->Move(origin, destination);
 }
 
-Location MouseHandler::getSquare() {
+void MouseHandler::moveMouse(Location& clicked) {
+    setActiveLocation(clicked);
+    if (isOutOfBoard()) {
+        clicked.first = 0;
+        clicked.second = 0;
+        return;
+    }
     SearchSquare();
-    return m_specifedSquare;
+    clicked = m_specifedSquare;
 }
 
 void MouseHandler::SearchSquare() {
@@ -129,11 +114,52 @@ bool MouseHandler::isInMiddleOfSquares(int i, int point, const std::vector<int>&
     }
     return false;
 }
+bool MouseHandler::isOutOfBoard() {
+    const auto[y, x] = m_activeLocation;
+    int maxX{121};
+    int minX{65};
+    int maxY{42};
+    int minY{12};
 
-void MouseHandler::getOrigin(int& input, Location& origin) {
-    moveMouse(input, origin);
+    if (x > maxX ||  x < minX) {
+        return true;
+    }
+
+    if (y > maxY || y < minY) {
+        return true;
+    }
+    
+    return false;
+}
+bool MouseHandler::getOrigin(Location& origin, MEVENT& event) {
+    fakeDelay();
+    int input1 = getch();
+    return findDemandedLocation(origin, event, input1) ? true : false;
 }
 
-void MouseHandler::getDestination(int& input, Location& destination) {
-    moveMouse(input, destination);
+bool MouseHandler::getDestination(Location& destination, MEVENT& event) {
+    fakeDelay(); //one click two input
+    int input2 = getch();
+    return findDemandedLocation(destination, event, input2) ? true : false;
+}
+
+bool MouseHandler::findDemandedLocation(Location& demandedLocation, MEVENT& event, int& input) {
+     if (input == KEY_MOUSE && getmouse(&event) == OK) {
+        demandedLocation.first = event.y;
+        demandedLocation.second = event.x;
+        mvprintw(0, 0, "%d", demandedLocation.first);
+        mvprintw(1, 0, "%d", demandedLocation.second);
+        moveMouse(demandedLocation);
+    }
+    ++a;
+    mvprintw(5, 0, "%d", a);
+    if (input == 'q') {
+        return false;
+    }
+    return true;
+}
+
+void fakeDelay() {
+    int input = getch();
+    return;
 }

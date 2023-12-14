@@ -1,16 +1,14 @@
 #ifndef BARRIERS_HANDLER_HPP
 #define BARRIERS_HANDLER_HPP
 
-
 #include <memory>
 #include "Board.hpp"
 #include "AbstractHandler.hpp"
 
-class Board;
 
 class Barriers_Handler : public AbstractHandler {
     public:
-    Barriers_Handler();
+    Barriers_Handler() = default;
     bool handleRequest(const Piece&, const Location&) override;
     private:
     bool isHorse();
@@ -33,6 +31,11 @@ class Barriers_Handler : public AbstractHandler {
     bool isOnRight();
     bool isOnRightBeneathCorner();
     bool isOnLeftAboveCorner();
+    private:
+    Piece* m_Piece {nullptr};
+    Location* m_desiredLocation{nullptr};
+    void setPiece(Piece&);
+    void setLocation(Location&);
 };
 
 #endif

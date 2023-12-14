@@ -9,19 +9,11 @@ Board* Board::getInstance() {
 }
 
 Board::Board() {
-    m_ExistanceHandler = new PieceExistanceHandler;
-    m_AvailableHandler = new AvailableCoordinates_Handler;
-    m_ExistanceHandler->setNextHandler(m_AvailableHandler);
     setWhitePieces();
     setBlackPieces();
 }
 
-Board::~Board() {
-    delete m_ExistanceHandler;
-    m_ExistanceHandler = nullptr;
-    delete m_AvailableHandler;
-    m_AvailableHandler = nullptr;
-}
+Board::~Board() {};
 
 void Board::setWhitePieces() {
     std::string color = "White";
@@ -97,7 +89,7 @@ void Board::setBlackPieces() {
     }
 }
 
-const PieceList& Board::getPieceList() const {
+PieceList& Board::getPieceList(){
     return m_pieceList;
 }
 
@@ -105,25 +97,16 @@ void Board::setMap(Location& pieceLocation, Index& pieceIndexes) {
     m_PieceMap[pieceLocation] = pieceIndexes;
 }
 
-void Board::movePiece(Location origin, Location destination) {
-    if (isZero(origin, destination)) {
-        return;
-    } 
-    const auto[y, x] = m_PieceMap[origin];
-    destination = m_PieceMap[destination];
-    m_ExistanceHandler->handleRequest(*m_pieceList[y][x], destination);
+std::map<Location, Index>& Board::getPieceMap() {
+    return m_PieceMap;
 }
 
-std::pair<bool, Color> Board::isEmpty(Location specifiedLocation) {
-    const auto[i, j] = m_PieceMap[specifiedLocation];
-    if(m_pieceList[i][j]->getUnicodeCharacter() == nullptr) {
+std::pair<bool, Color> Board::isEmpty(Index specifiedLocation) {
+    const auto[i, j] = specifiedLocation;
+    if(m_pieceList[i][j] == nullptr) {
         return {true, Color::Unknown};
     }
     Color pieceColor = m_pieceList[i][j]->getColor();
     return {false, pieceColor};
 }
 
-bool Board::isZero(const Location& origin, const Location& destination) {
-   return  (0 == origin.first || 0 == origin.second) ? true : false;
-   return  (0 == destination.first || 0 == destination.second) ? true : false;
-}

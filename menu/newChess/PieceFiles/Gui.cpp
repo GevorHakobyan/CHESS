@@ -8,6 +8,8 @@ void Gui::drawBoard() {
 
 void Gui::Play() {
     MouseHandler* mouseHandler{MouseHandler::getInstance()};
-    mouseHandler->HandleClicks();
+    while (true) {
+        mouseHandler->HandleClicks();
+    }
 }
 

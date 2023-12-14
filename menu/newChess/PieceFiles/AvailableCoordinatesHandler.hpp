@@ -6,7 +6,7 @@
 #include <ncurses.h>
 class AvailableCoordinates_Handler : public AbstractHandler {
     public:
-    AvailableCoordinates_Handler();
+    AvailableCoordinates_Handler() = default;
     bool handleRequest(const Piece&, const Location&) override;
 };
 

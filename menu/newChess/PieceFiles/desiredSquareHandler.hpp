@@ -7,11 +7,11 @@
 
 class DesiredSquare_Handler : public AbstractHandler {
    public:
-   DesiredSquare_Handler(const Piece&, const Location);
-   bool handleRequest() override;
+   DesiredSquare_Handler() = default;
+   bool handleRequest(const Piece&, const Location&) override;
    private:
-   bool isEmpty();
-   bool isEnemy();
+   bool isEmpty(const Location&);
+   bool isEnemy(const Piece&, const Location&);
 };
 
-#endif
+#endif //DESIRED_SQUARE_HANDLER
