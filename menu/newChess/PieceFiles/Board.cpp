@@ -3,7 +3,7 @@ Board* Board::m_Board = nullptr;
 
 Board* Board::getInstance() {
     if (m_Board == nullptr) {
-        m_Board = new Board();
+        m_Board = new Board;
     }
     return m_Board;
 }
@@ -89,18 +89,6 @@ void Board::setBlackPieces() {
     }
 }
 
-PieceList& Board::getPieceList(){
-    return m_pieceList;
-}
-
-void Board::setMap(Location& pieceLocation, Index& pieceIndexes) {
-    m_PieceMap[pieceLocation] = pieceIndexes;
-}
-
-std::map<Location, Index>& Board::getPieceMap() {
-    return m_PieceMap;
-}
-
 std::pair<bool, Color> Board::isEmpty(Index specifiedLocation) {
     const auto[i, j] = specifiedLocation;
     if(m_pieceList[i][j] == nullptr) {
@@ -110,3 +98,18 @@ std::pair<bool, Color> Board::isEmpty(Index specifiedLocation) {
     return {false, pieceColor};
 }
 
+const PieceList& Board::getPieceList() const {
+    return m_pieceList;
+}
+
+void Board::updateMatrix(Index& previousIndex, Index& newIndex) {
+    const auto[Yprev, Xprev] = previousIndex;
+    const auto[Ynew, Xnew] = newIndex;
+    
+    if (nullptr != m_pieceList[Ynew][Xnew]) {
+        m_pieceList[Ynew][Xnew].reset();
+    } 
+   
+    m_pieceList[Ynew][Xnew] = std::move(m_pieceList[Yprev][Xprev]);
+    m_pieceList[Yprev][Xprev].reset(); //has already been moved?? is it even neceassary??
+}

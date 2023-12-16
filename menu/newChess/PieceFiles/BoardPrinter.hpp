@@ -10,7 +10,7 @@ using CursorPositon = std::pair<int, int>;
 class BoardPrinter{
     public:
     BoardPrinter(BoardView*);
-    void Print();
+    void Print(PiecesPrinter&);  
     private:
     void printRow(Row&, int);
     void printSquareLine(std::array<const wchar_t*,3>&, int);
@@ -22,9 +22,11 @@ class BoardPrinter{
     void setCursorLocation();
     CursorPositon getCursorLocation();
     void setSquareLocations();
+  
 
     private:
     BoardView* m_board{nullptr};
+    Map m_PieceMap{nullptr};
     int m_boardSize{0};
     CursorPositon m_cursor;
     int m_activeSquare{0};

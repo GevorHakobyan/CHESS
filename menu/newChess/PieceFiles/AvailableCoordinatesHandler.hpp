@@ -4,6 +4,7 @@
 
 #include "AbstractHandler.hpp"
 #include <ncurses.h>
+
 class AvailableCoordinates_Handler : public AbstractHandler {
     public:
     AvailableCoordinates_Handler() = default;

@@ -3,7 +3,7 @@
 Model* Model::m_Model = nullptr;
 
 Model::Model()
-: m_Board{Board::getInstance()}, m_pieceMap{m_Board->getPieceMap()}, m_pieceList{m_Board->getPieceList()}
+: m_Board{Board::getInstance()}, m_pieceList{m_Board->getPieceList()}
 {
     m_Board  = Board::getInstance();
     m_ExistanceHandler = new PieceExistanceHandler;
@@ -23,25 +23,25 @@ Model* Model::getInstance() {
     return m_Model;
 }
 
-void Model::Move(const Location& origin, Location& destination) {
-  
+bool Model::Move(UserInput userInput) {
+
+    auto[origin, destination] = userInput;
     if (isZero(origin, destination)) {
         mvprintw(25, 0, "%s", "ZERO");
-        return;
+        return false;
     }
-    const auto[y, x] = m_pieceMap[origin];
-    destination = m_pieceMap[destination];
-    mvprintw(26, 0, "%d",y);
-    mvprintw(26, 3, "%d",x);
-    mvprintw(27, 0, "%d",destination.first);
-    mvprintw(27, 3, "%d",destination.second);
+    const auto[y, x] = (*m_pieceMap)[origin];
+    destination = (*m_pieceMap)[destination];
      
     if ( m_ExistanceHandler->handleRequest(*m_pieceList[y][x], destination)) {  
         mvprintw(9, 0, "%d", destination.first);
         mvprintw(9, 3, "%d", destination.second);
-        updateBoardMatrix(m_pieceMap[origin], destination);
-        setMoveIndexes(m_pieceMap[origin], destination);
+        setMovedPiece_Character(origin);
+        setMovedSquare_Character(origin);
+        //updateBoardMatrix((*m_pieceMap)[origin], destination);
+        return true;
    } 
+   return false;
 }
 
 bool Model::isZero(const Location& origin, const Location& destination) {
@@ -52,26 +52,58 @@ bool Model::isZero(const Location& origin, const Location& destination) {
 }
 
 void Model::updateMap(Location& location, Index& pieceIndex) {
-    m_Board->setMap(location, pieceIndex);
+    (*m_pieceMap)[location] = pieceIndex;
 }
 
 void Model::updateBoardMatrix(Index& previousIndex, Index& newIndex) {
-    const auto[Yprev, Xprev] = previousIndex;
-    const auto[Ynew, Xnew] = newIndex;
-    
-    if (nullptr != m_pieceList[Ynew][Xnew]) {
-        m_pieceList[Ynew][Xnew].reset();
-    } 
-   
-    m_pieceList[Ynew][Xnew] = std::move(m_pieceList[Yprev][Xprev]);
-    m_pieceList[Yprev][Xprev].reset(); //has already been moved?? is it even neceassary??
+     m_Board->updateMatrix(previousIndex, newIndex);
 }
 
-void Model::setMoveIndexes(Index& prevIndex, Index& newIndex) {
-    m_Target_Prev_Index = prevIndex;
-    m_Target_New_Index = newIndex;
+void Model::setMap(Map& pieceMap) {
+    m_pieceMap = std::move(pieceMap);
 }
 
-MoveIndexes Model::getMoveIndexes() const {
-    return {m_Target_Prev_Index, m_Target_New_Index};
+const PieceList& Model::getPieceList() const {
+    return m_pieceList;
+}
+
+const wchar_t* Model::getMovedPiece_Character() {
+    const wchar_t* character = m_Piece;
+    return character;
+}
+
+const wchar_t* Model::getSquare_Character() {
+    const wchar_t* character = m_Square;
+    return character;
+}
+
+bool Model::isEven(int index) {
+    return (0 == index % 2) ? true : false;
+}
+
+// (true == black) (false == white)
+ bool Model::getColor(const Location& origin) {
+   const auto[i, j] = (*m_pieceMap)[origin];
+   mvprintw(10, 17, "%d", i);
+   mvprintw(10, 19, "%d", j);
+
+   if(!(isEven(i) && isEven(j))) {
+    mvprintw(15, 15, "%s", "in first");
+    return true;
+   }
+
+   if((isEven(i) && !isEven(j))) {
+    mvprintw(15, 15, "%s", "in second");
+    return true;
+   }
+   return false;
+}
+
+void Model::setMovedPiece_Character(const Location& origin) {
+    const auto[i, j] = (*m_pieceMap)[origin];
+    m_Piece = const_cast<wchar_t*>((m_pieceList[i][j]->getUnicodeCharacter()));
+}
+
+void Model::setMovedSquare_Character(const Location& origin) {
+    m_Square =  const_cast<wchar_t*>((getColor(origin)) ? (L"\u25A0") : (L"\u25A1"));
 }

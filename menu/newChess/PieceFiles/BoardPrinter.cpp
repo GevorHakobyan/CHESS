@@ -4,14 +4,13 @@ void printRowNumber(int);
 BoardPrinter::BoardPrinter(BoardView* myBoard) {
     m_board = myBoard;
     m_boardSize = myBoard->getBoard().size();
+    m_PieceMap = std::make_unique<std::map<Location, Index>>();
 }
 
-void BoardPrinter::Print() {
+void BoardPrinter::Print(PiecesPrinter& piecePrinter) {
     printMatrix();
     printColumLetter();
-    PiecesPrinter piecePrinter;
     piecePrinter.print(m_board->getSquaresIdentities());
-    //piecePrinter.printAvailables();
 }
 
 void BoardPrinter::printMatrix() {

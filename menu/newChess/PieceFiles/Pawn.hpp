@@ -11,7 +11,6 @@ class Pawn : public Piece{
     public:
     Pawn(const std::string& color, const wchar_t*, Location startLocation);
     private:
-    private: //Methods
     PawnPosition detectPosition();
     void updateAvailableCoordinates() override; 
     AvailableCoordinates standardUpdate(Location);

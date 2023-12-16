@@ -5,7 +5,6 @@
 #include <string>
 #include <memory>
 #include <utility>
-//#include "Board.hpp"
 
 using Location = std::pair<int, int>;
 using AvailableCoordinates = std::vector<Location>;

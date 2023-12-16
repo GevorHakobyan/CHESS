@@ -21,11 +21,9 @@ class Board {
     static Board* getInstance();
     Board(Board&) =  delete;
     Board& operator=(const Board&) = delete;
-    PieceList& getPieceList();
-    void setMap(Location&, Index&);
-    std::map<Location, Index>& getPieceMap();
-    std::map<Location, Index> m_PieceMap;
+    const PieceList& getPieceList() const;
     std::pair<bool, Color> isEmpty(Index);
+    void updateMatrix(Index&, Index&);
 
     private: 
     ~Board();

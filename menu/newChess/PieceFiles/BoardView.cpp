@@ -1,4 +1,5 @@
 #include "BoardView.hpp"
+#include <ncurses.h>
 #include <iostream>
 
 void StartRowWithBlack(Row&);
@@ -6,11 +7,13 @@ void StartRowWithWhite(Row&);
 void fillBlack(Square&);
 void fillWhite(Square&);
 
+
 BoardView* BoardView::m_BoardView = nullptr;
 
 BoardView* BoardView::getInstance() {
     if (m_BoardView == nullptr) {
         m_BoardView = new BoardView(8, 8);
+        
     }
     return m_BoardView; 
 }

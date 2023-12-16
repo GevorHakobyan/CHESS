@@ -2,7 +2,6 @@
 
 
 MouseHandler* MouseHandler::m_mouseHandler = nullptr;
-void fakeDelay();
 
 MouseHandler* MouseHandler::getInstance() {
     if (nullptr == m_mouseHandler) {
@@ -38,8 +37,8 @@ void MouseHandler::HandleClicks () {
     if (!getDestination(destination, event)) {
         return;
     }
-    refresh();
-    sendIfo(origin, destination);
+    refresh();   
+    setUserInput(origin, destination);
 }
 
 void MouseHandler::moveMouse(Location& clicked) {
@@ -78,6 +77,7 @@ void MouseHandler::setYcoordinates() {
     for (int i{0}; i < 64; i += 8) {
         m_Ycoordinates.push_back(std::get<0>(m_identaties[i]));
     }
+    
 }
 
 int MouseHandler::Search(const int point) {
@@ -129,38 +129,44 @@ bool MouseHandler::isOutOfBoard() {
     return false;
 }
 bool MouseHandler::getOrigin(Location& origin, MEVENT& event) {
-    fakeDelay();
-    int input1 = getch();
-    return findDemandedLocation(origin, event, input1) ? true : false;
+    int realInput;
+    int fakeInput;
+    getCorrectedInput(realInput, fakeInput);
+    return findDemandedLocation(origin, event, realInput) ? true : false;
 }
 
 bool MouseHandler::getDestination(Location& destination, MEVENT& event) {
-    fakeDelay(); //one click two input
-    int input2 = getch();
-    return findDemandedLocation(destination, event, input2) ? true : false;
+    int realInput;
+    int fakeInput;
+    getCorrectedInput(realInput, fakeInput);
+    return findDemandedLocation(destination, event, realInput) ? true : false;
 }
 
 bool MouseHandler::findDemandedLocation(Location& demandedLocation, MEVENT& event, int& input) {
      if (input == KEY_MOUSE && getmouse(&event) == OK) {
         demandedLocation.first = event.y;
         demandedLocation.second = event.x;
-        mvprintw(0, 0, "%d", demandedLocation.first);
-        mvprintw(1, 0, "%d", demandedLocation.second);
         moveMouse(demandedLocation);
     }
     ++a;
-    mvprintw(5, 0, "%d", a);
+    mvprintw(0, 0, "%d", a);
     if (input == 'q') {
         return false;
     }
     return true;
 }
 
-void fakeDelay() {
-    int input = getch();
-    return;
+
+void MouseHandler::setUserInput(Location origin, Location destination) {
+ 
+    m_UserInput = {origin, destination};
 }
 
-void MouseHandler::sendIfo(Location& origin, Location& destination) {
-    Controller::getInputFrom_User(origin, destination);
+UserInput MouseHandler::getUserInput() const {
+    return m_UserInput;
+}
+
+void MouseHandler::getCorrectedInput(int& realInput, int& fakeInput) {
+    realInput = getch();
+    fakeInput = getch();
 }

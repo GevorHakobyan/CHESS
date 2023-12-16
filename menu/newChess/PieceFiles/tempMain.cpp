@@ -1,4 +1,4 @@
-#include "Gui.hpp"
+#include "Controller.hpp"
 #include <ncurses.h>
 #include <locale.h>
 
@@ -10,9 +10,10 @@ int main() {
     
     bkgd(COLOR_PAIR(1));
     box(stdscr, 0, 0);
-    Gui* myGui{Gui::getInstance()};
-    myGui->drawBoard();
-    myGui->Play();
+    Controller myController{}; 
+    myController.setBoard();
+    myController.Play();
+   
     refresh();
     getch();
     endwin();

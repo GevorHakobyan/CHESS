@@ -1,19 +1,21 @@
 #include "PiecesPrinter.hpp"
+
 Index PiecesPrinter::m_pieceIndex{0,0};
+
+PiecesPrinter::PiecesPrinter(const PieceList& myPieceList)
+: m_PieceMap{std::make_unique<std::map<Location, Index>>()},
+  m_PieceList {myPieceList} {};
 
 void PiecesPrinter::getLocation(Location& location, const SquareIdentity& identities, int index) {
      location.first = std::get<0>(identities[index]);
      location.second = std::get<1>(identities[index]);
 }
 
-void PiecesPrinter::setBoardMap(Location& location, Board* myBoard) {
-     myBoard->setMap(location, m_pieceIndex);
+void PiecesPrinter::setPieceMap(Location& location) {
+     m_PieceMap->insert(std::make_pair(location, m_pieceIndex));
 }
 
 void PiecesPrinter::print(const SquareIdentity& identities) {
-    Board* myBoard{Board::getInstance()}; //what will happen if I use smart pointer??
-    const PieceList& myList{myBoard->getPieceList()};
-
     int index{0};
     Location location;
 
@@ -23,19 +25,23 @@ void PiecesPrinter::print(const SquareIdentity& identities) {
             m_pieceIndex.second = j;
         
             getLocation(location, identities, index);
-            setBoardMap(location, myBoard);
+            setPieceMap(location);
 
-            if (myList[i][j] != nullptr) {
-                printPiece(myList[i][j]->getUnicodeCharacter(), location);
+            if (m_PieceList[i][j] != nullptr) {
+                printCharacter(m_PieceList[i][j]->getUnicodeCharacter(), location);
             }
             ++index;
         }
     } 
 
-    myBoard = nullptr;
 }
 
-void PiecesPrinter::printPiece(const wchar_t* piece, const Location& location) {
+void PiecesPrinter::printCharacter(const wchar_t* character, const Location& location) {
     move (location.first - 1, location.second - 3); 
-    addwstr(piece);
+    addwstr(character);
+}
+
+void PiecesPrinter::moveMapTo_View(Map& viewMap) {
+    viewMap = std::move(m_PieceMap);
+    m_PieceMap.reset();
 }

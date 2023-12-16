@@ -2,7 +2,6 @@
 #define HANDLER_HPP
 
 #include "Piece.hpp"
-///#include "Board.hpp"
 
 class Handler {
     public:

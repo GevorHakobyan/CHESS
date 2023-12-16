@@ -1,13 +1,16 @@
 #ifndef MOUSE_HANDLER
 #define MOUSE_HANDLER
 
-#include "Contoller.hpp"
+//#include "Controller.hpp"
+#include "BoardPrinter.hpp"
+using UserInput = std::pair<Location, Location>;
 
 class MouseHandler {
     public:
     MouseHandler(); 
     static MouseHandler* getInstance();  
-    void HandleClicks();
+    void HandleClicks(); 
+    UserInput getUserInput() const;
 
     private: 
     Location getSquare();
@@ -24,8 +27,9 @@ class MouseHandler {
     bool getOrigin(Location&, MEVENT&);
     bool getDestination(Location&, MEVENT&);
     bool findDemandedLocation(Location&, MEVENT&, int&);
-    void sendIfo(Location&, Location&);
-    
+    void setUserInput(Location, Location);
+    void getCorrectedInput(int&, int&);
+   
     private:
     Location m_activeLocation;
     Location m_specifedSquare;
@@ -33,6 +37,7 @@ class MouseHandler {
     std::vector<int> m_Xcoordinates;
     std::vector<int> m_Ycoordinates;
     static MouseHandler* m_mouseHandler;
+    UserInput m_UserInput;
     int a{0};
 };
 #endif //MOUSE_HANDLER

@@ -1,4 +1,5 @@
 #include "Knight.hpp"
+
 Knight::Knight(const std::string& color, const wchar_t* character, Location startLocation)
  : Piece(color, character, startLocation) 
  {
