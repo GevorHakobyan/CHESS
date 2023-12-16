@@ -9,6 +9,7 @@ class AvailableCoordinates_Handler : public AbstractHandler {
     public:
     AvailableCoordinates_Handler() = default;
     bool handleRequest(const Piece&, const Location&) override;
+    int a{0};
 };
 
 #endif

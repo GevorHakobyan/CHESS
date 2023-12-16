@@ -11,7 +11,8 @@ bool AvailableCoordinates_Handler::handleRequest(const Piece& m_Piece, const Loc
     }
 
     if (answer == true) {
+    mvprintw(5, 0, "%s", "In availabel coordinates   ");
         return AbstractHandler::handleRequest(m_Piece, m_desiredLocation);
-    }
+    } 
     return false;
 }

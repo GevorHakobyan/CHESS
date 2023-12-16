@@ -7,7 +7,7 @@ bool Barriers_Handler::handleRequest(const Piece& myPiece, const Location& mydes
         return true;
     }
 
-    if (isOnSameColum()) {
+    if (isOnSameColum()) {  
         return handleOnSameColum()? AbstractHandler::handleRequest(myPiece, mydesiredLocation) : false;
     }
 
@@ -16,9 +16,10 @@ bool Barriers_Handler::handleRequest(const Piece& myPiece, const Location& mydes
     }
 
     if (handlePrependicular()) {
-        return handlePrependicular() ? AbstractHandler::handleRequest(myPiece, mydesiredLocation): false;
+        return AbstractHandler::handleRequest(myPiece, mydesiredLocation);
+    } else {
+        return false;
     }
-    return false;
 }
 
 bool Barriers_Handler::isHorse() {
@@ -48,7 +49,8 @@ bool Barriers_Handler::handleOnSameRow() {
     return goLeft();
 }
 
-bool Barriers_Handler::handlePrependicular() {
+bool Barriers_Handler::handlePrependicular() { 
+  
     if (isAbove()) {
         return isOnLeftAboveCorner() ? goLeftUp() : goRightUp();
     }
@@ -165,7 +167,7 @@ bool Barriers_Handler::goLeftUp() {
 }
 
 bool Barriers_Handler::goLeftDown() {
-     auto [startY, startX] = m_Piece->getCurrentLocation();
+    auto [startY, startX] = m_Piece->getCurrentLocation();
     auto [desiredY, desiredX] = *m_desiredLocation;
     Board* myBoard{Board::getInstance()}; 
     Location desiredLocation = *m_desiredLocation;

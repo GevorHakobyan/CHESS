@@ -1,4 +1,5 @@
 #include "Queen.hpp"
+#include <ncurses.h>
 
 Queen::Queen(const std::string& color, const wchar_t* character, Location startLocation) 
 : Piece(color, character, startLocation) 
@@ -7,7 +8,7 @@ Queen::Queen(const std::string& color, const wchar_t* character, Location startL
 };
 
 void Queen::setAvailableCoordinates() {
-  
+  mvprintw(0, 100, "%s", "I ammmmmmmmmm");
     setRowCoordinates();
     setColumCoordinates();
     setRightUpCoordinates();

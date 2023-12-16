@@ -7,12 +7,13 @@ using UserInput = std::pair<Location, Location>;
 
 class MouseHandler {
     public:
-    MouseHandler(); 
+    
     static MouseHandler* getInstance();  
-    void HandleClicks(); 
+    UserInput getUserInput(); 
     UserInput getUserInput() const;
 
     private: 
+    MouseHandler(); 
     Location getSquare();
     void SearchSquare();
     void moveMouse(Location&);
@@ -27,7 +28,6 @@ class MouseHandler {
     bool getOrigin(Location&, MEVENT&);
     bool getDestination(Location&, MEVENT&);
     bool findDemandedLocation(Location&, MEVENT&, int&);
-    void setUserInput(Location, Location);
     void getCorrectedInput(int&, int&);
    
     private:
@@ -37,7 +37,7 @@ class MouseHandler {
     std::vector<int> m_Xcoordinates;
     std::vector<int> m_Ycoordinates;
     static MouseHandler* m_mouseHandler;
-    UserInput m_UserInput;
     int a{0};
+    int b{0};
 };
 #endif //MOUSE_HANDLER

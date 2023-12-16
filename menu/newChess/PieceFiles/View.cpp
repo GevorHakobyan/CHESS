@@ -21,8 +21,7 @@ void View::printBoardView() {
 }
 
 void View::Play() {
-   m_Mouse->HandleClicks(); 
-   m_UserInput = m_Mouse->getUserInput();
+    m_UserInput = m_Mouse->getUserInput();
 }
 
 void View::moveMapTo_Controller(Map& controllerMap) {

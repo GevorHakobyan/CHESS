@@ -1,4 +1,5 @@
 #include "Bishop.hpp"
+#include <ncurses.h>
 
 Bishop::Bishop(const std::string& color, const wchar_t* character, Location startLocation) 
 : Piece(color, character, startLocation) 
@@ -76,4 +77,5 @@ void Bishop::setLeftDownCoordinates (){
     tmpLocation.second--;
     m_Avialble_Coordinates.push_back(tmpLocation);
   }
+ 
 }

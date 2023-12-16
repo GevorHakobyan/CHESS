@@ -12,6 +12,7 @@ using Map = std::unique_ptr<std::map<Location, Index>>;
 class PiecesPrinter {
     public:
     PiecesPrinter(const PieceList&);
+   
     void print(const SquareIdentity&);
     static void printCharacter(const wchar_t*, const Location&);
     void moveMapTo_View(Map&); 

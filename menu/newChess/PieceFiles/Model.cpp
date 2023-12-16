@@ -24,18 +24,14 @@ Model* Model::getInstance() {
 }
 
 bool Model::Move(UserInput userInput) {
-
     auto[origin, destination] = userInput;
     if (isZero(origin, destination)) {
-        mvprintw(25, 0, "%s", "ZERO");
         return false;
     }
     const auto[y, x] = (*m_pieceMap)[origin];
     destination = (*m_pieceMap)[destination];
      
     if ( m_ExistanceHandler->handleRequest(*m_pieceList[y][x], destination)) {  
-        mvprintw(9, 0, "%d", destination.first);
-        mvprintw(9, 3, "%d", destination.second);
         setMovedPiece_Character(origin);
         setMovedSquare_Character(origin);
         //updateBoardMatrix((*m_pieceMap)[origin], destination);
@@ -81,22 +77,22 @@ bool Model::isEven(int index) {
     return (0 == index % 2) ? true : false;
 }
 
+bool Model::isOdd(int index) {
+    return (0 != index % 2) ? true : false;
+}
+
 // (true == black) (false == white)
  bool Model::getColor(const Location& origin) {
    const auto[i, j] = (*m_pieceMap)[origin];
-   mvprintw(10, 17, "%d", i);
-   mvprintw(10, 19, "%d", j);
 
-   if(!(isEven(i) && isEven(j))) {
-    mvprintw(15, 15, "%s", "in first");
-    return true;
+   if((isEven(i) && isEven(j))) {
+    return false;
    }
 
-   if((isEven(i) && !isEven(j))) {
-    mvprintw(15, 15, "%s", "in second");
-    return true;
+   if((isOdd(i) && isOdd(j))) {
+    return false;
    }
-   return false;
+   return true;
 }
 
 void Model::setMovedPiece_Character(const Location& origin) {

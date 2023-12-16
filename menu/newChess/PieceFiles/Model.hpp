@@ -23,6 +23,7 @@ class Model {
     void setMovedPiece_Character(const Location&);
     void setMovedSquare_Character(const Location&);
     bool isEven(const int);
+    bool isOdd(const int);
     bool getColor(const Location&);
 
     private:
