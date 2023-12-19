@@ -2,8 +2,16 @@
 
 bool AvailableCoordinates_Handler::handleRequest(const Piece& m_Piece, const Location& m_desiredLocation) { 
     bool answer{false};
-    AvailableCoordinates myPieceAvailableCoordinates = m_Piece.getAvailableCoordinates();
-    for (const auto& coordinate : myPieceAvailableCoordinates) {
+    
+    AvailableCoordinates myPieceAvailableCoordinates = m_Piece.getAvailableCoordinates(); 
+    move(0,0);
+    /*for (const auto& coordinate : myPieceAvailableCoordinates) {
+        printw("%d", coordinate.first);
+        printw(" ");
+        printw("%d", coordinate.second);
+        printw("\n");
+    }*/
+     for (const auto& coordinate : myPieceAvailableCoordinates) {
         if (coordinate == m_desiredLocation) {
             answer = true;
             break;
@@ -11,8 +19,8 @@ bool AvailableCoordinates_Handler::handleRequest(const Piece& m_Piece, const Loc
     }
 
     if (answer == true) {
-    mvprintw(5, 0, "%s", "In availabel coordinates   ");
         return AbstractHandler::handleRequest(m_Piece, m_desiredLocation);
-    } 
+    }
+    
     return false;
 }

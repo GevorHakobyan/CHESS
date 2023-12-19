@@ -26,8 +26,8 @@ void MouseHandler::setActiveLocation(Location active) {
 UserInput MouseHandler::getUserInput () {
     keypad(stdscr, TRUE);
     mousemask(ALL_MOUSE_EVENTS, NULL);
-    Location origin{42, 84};
-    Location destination{34, 70};
+    Location origin;
+    Location destination;
     UserInput nullPlace{origin, destination};
     MEVENT event;
      
@@ -38,12 +38,8 @@ UserInput MouseHandler::getUserInput () {
     if (!getDestination(destination, event)) {
         return nullPlace;
     }
-    mvprintw(1, 0, "%d", origin.first);
-    mvprintw(1, 3, "%d", origin.second);
-    mvprintw(2, 0, "%d", destination.first);
-    mvprintw(2, 3, "%d", destination.second);
-    refresh();
-    return nullPlace; 
+    refresh(); 
+    return {origin, destination}; 
 }
 
 void MouseHandler::moveMouse(Location& clicked) {
@@ -132,8 +128,7 @@ bool MouseHandler::isOutOfBoard() {
     return false;
 }
 bool MouseHandler::getOrigin(Location& origin, MEVENT& event) { 
-    ++a;
-    mvprintw(0, 0, "%d", a);
+  
     int realInput;
     int fakeInput; 
     
@@ -142,8 +137,6 @@ bool MouseHandler::getOrigin(Location& origin, MEVENT& event) {
 }
 
 bool MouseHandler::getDestination(Location& destination, MEVENT& event) {
-    ++b;
-    mvprintw(5, 0, "%d", b  );
     int realInput;
     int fakeInput;  
 
@@ -156,7 +149,9 @@ bool MouseHandler::findDemandedLocation(Location& demandedLocation, MEVENT& even
         demandedLocation.first = event.y;
         demandedLocation.second = event.x;
         moveMouse(demandedLocation);
-    }
+    }  
+    ++a;
+    mvprintw(0, 0, "%d", a);
    
     if (input == 'q') {
         return false;

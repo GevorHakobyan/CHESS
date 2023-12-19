@@ -1,6 +1,6 @@
 #include "View.hpp"
 
-View* View::m_View = nullptr;
+/*View* View::m_View = nullptr;
 
 View::View(const PieceList& myPieceList)
 : m_PieceList{myPieceList}, m_Mouse{nullptr} {};
@@ -35,4 +35,4 @@ UserInput View::GetInput() const {
 void View::updateBoardView(const wchar_t* piece, const wchar_t* square, Location& origin, Location& destination) {
     PiecesPrinter::printCharacter(piece, destination);
     PiecesPrinter::printCharacter(square, origin);
-}
+}*/

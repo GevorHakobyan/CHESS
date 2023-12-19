@@ -2,8 +2,8 @@
 #define BARRIERS_HANDLER_HPP
 
 #include <memory>
-#include "Board.hpp"
 #include "AbstractHandler.hpp"
+#include "Board.hpp"
 
 
 class Barriers_Handler : public AbstractHandler {
@@ -11,7 +11,8 @@ class Barriers_Handler : public AbstractHandler {
     Barriers_Handler() = default;
     bool handleRequest(const Piece&, const Location&) override;
     private:
-    bool isHorse();
+    bool isHorse(const Piece&);
+    bool isPawn(const Piece&);
    
     bool handleOnSameRow();
     bool handleOnSameColum();
@@ -32,10 +33,10 @@ class Barriers_Handler : public AbstractHandler {
     bool isOnRightBeneathCorner();
     bool isOnLeftAboveCorner();
     private:
-    Piece* m_Piece {nullptr};
-    Location* m_desiredLocation{nullptr};
-    void setPiece(Piece&);
-    void setLocation(Location&);
+    Location m_desiredLocation;
+    Location m_currentLocation;
+    void setDesiredLocation(const Location&);
+    void setCurrentLocation(const Piece&);
 };
 
 #endif

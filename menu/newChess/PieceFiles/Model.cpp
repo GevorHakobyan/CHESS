@@ -30,14 +30,17 @@ bool Model::Move(UserInput userInput) {
     }
     const auto[y, x] = (*m_pieceMap)[origin];
     destination = (*m_pieceMap)[destination];
+    
+
      
-    if ( m_ExistanceHandler->handleRequest(*m_pieceList[y][x], destination)) {  
+    if (m_ExistanceHandler->handleRequest(*m_pieceList[y][x], destination)) {
         setMovedPiece_Character(origin);
         setMovedSquare_Character(origin);
-        //updateBoardMatrix((*m_pieceMap)[origin], destination);
+        updateBoardMatrix((*m_pieceMap)[origin], destination);
+        UpdatePiece_Data(destination);
         return true;
-   } 
-   return false;
+    }
+    return false;
 }
 
 bool Model::isZero(const Location& origin, const Location& destination) {
@@ -53,6 +56,10 @@ void Model::updateMap(Location& location, Index& pieceIndex) {
 
 void Model::updateBoardMatrix(Index& previousIndex, Index& newIndex) {
      m_Board->updateMatrix(previousIndex, newIndex);
+}
+
+void Model::UpdatePiece_Data(Location& newLocation) {
+    m_Board->updatePieceData(newLocation);
 }
 
 void Model::setMap(Map& pieceMap) {
@@ -82,7 +89,7 @@ bool Model::isOdd(int index) {
 }
 
 // (true == black) (false == white)
- bool Model::getColor(const Location& origin) {
+ bool Model::getSquareColor(const Location& origin) {
    const auto[i, j] = (*m_pieceMap)[origin];
 
    if((isEven(i) && isEven(j))) {
@@ -101,5 +108,15 @@ void Model::setMovedPiece_Character(const Location& origin) {
 }
 
 void Model::setMovedSquare_Character(const Location& origin) {
-    m_Square =  const_cast<wchar_t*>((getColor(origin)) ? (L"\u25A0") : (L"\u25A1"));
+    m_Square =  const_cast<wchar_t*>((getSquareColor(origin)) ? (L"\u25A0") : (L"\u25A1"));
+}
+
+Color Model::getPieceColor(const Index& myPieceIndex) {
+    const auto[i , j] = myPieceIndex;
+
+    if (m_pieceList[i][j] == nullptr) {
+        return Color::Unknown;
+    }
+
+    return m_pieceList[i][j].get()->getColor();
 }

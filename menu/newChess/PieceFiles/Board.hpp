@@ -24,6 +24,7 @@ class Board {
     const PieceList& getPieceList() const;
     std::pair<bool, Color> isEmpty(Index);
     void updateMatrix(Index&, Index&);
+    void updatePieceData(Location&);
 
     private: 
     ~Board();
@@ -32,6 +33,7 @@ class Board {
     void setBlackPieces();
     
     static Board* m_Board;
+    int a{0};
     PieceList m_pieceList;
 };
 #endif 

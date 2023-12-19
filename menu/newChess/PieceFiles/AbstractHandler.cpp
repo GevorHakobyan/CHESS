@@ -1,7 +1,6 @@
 #include "AbstractHandler.hpp"
 #include <utility>
 
-
 Handler* AbstractHandler::setNextHandler(Handler* handler) {
     this->m_nextHandler = handler;
     return handler;

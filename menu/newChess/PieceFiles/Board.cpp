@@ -105,11 +105,16 @@ const PieceList& Board::getPieceList() const {
 void Board::updateMatrix(Index& previousIndex, Index& newIndex) {
     const auto[Yprev, Xprev] = previousIndex;
     const auto[Ynew, Xnew] = newIndex;
-    
+
     if (nullptr != m_pieceList[Ynew][Xnew]) {
         m_pieceList[Ynew][Xnew].reset();
     } 
-   
     m_pieceList[Ynew][Xnew] = std::move(m_pieceList[Yprev][Xprev]);
     m_pieceList[Yprev][Xprev].reset(); //has already been moved?? is it even neceassary??
+}
+
+void Board::updatePieceData(Location& newLocation) {
+    const auto[y, x] = newLocation;
+    m_pieceList[y][x].get()->setCurrentLocation(newLocation);
+    m_pieceList[y][x].get()->updateAvailableCoordinates();
 }

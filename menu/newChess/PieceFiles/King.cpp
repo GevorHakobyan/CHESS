@@ -7,6 +7,7 @@ King::King(const std::string& color, const wchar_t* character, Location currentL
 };
 
 void King::updateAvailableCoordinates() {
+    m_Avialble_Coordinates.clear();
     setAvailableCoordinates();
 }
 

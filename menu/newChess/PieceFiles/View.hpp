@@ -1,4 +1,4 @@
-#ifndef VIEW_HPP
+/*#ifndef VIEW_HPP
 #define VIEW_HPP
 
 #include "BoardPrinter.hpp"
@@ -27,4 +27,4 @@ class View{
     UserInput m_UserInput;
 };
 
-#endif
+#endif*/

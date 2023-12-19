@@ -1,35 +1,63 @@
 #include "BarriersHandler.hpp"
 
 bool Barriers_Handler::handleRequest(const Piece& myPiece, const Location& mydesiredLocation) {
-    setPiece(const_cast<Piece&>(myPiece));
-    setLocation(const_cast<Location&>(mydesiredLocation)); //to change every time
-    if (isHorse()) {
-        return true;
+    setCurrentLocation(myPiece);
+    setDesiredLocation(mydesiredLocation); 
+  
+    if (isHorse(myPiece)) {
+        
+        return AbstractHandler::handleRequest(myPiece, mydesiredLocation);
     }
 
-    if (isOnSameColum()) {  
+    if (isOnSameColum()) { 
+        
         return handleOnSameColum()? AbstractHandler::handleRequest(myPiece, mydesiredLocation) : false;
     }
 
-    if (isOnSameRow()) {
+    if (isOnSameRow()) { 
+        
         return handleOnSameRow() ? AbstractHandler::handleRequest(myPiece, mydesiredLocation) : false;
     }
 
+    if (isPawn(myPiece)) {
+        return AbstractHandler::handleRequest(myPiece, mydesiredLocation);
+    } 
+   
     if (handlePrependicular()) {
         return AbstractHandler::handleRequest(myPiece, mydesiredLocation);
-    } else {
-        return false;
     }
+    return false;
 }
 
-bool Barriers_Handler::isHorse() {
+void Barriers_Handler::setCurrentLocation(const Piece& myPiece) {
+    m_currentLocation = myPiece.getCurrentLocation();
+}
+
+void Barriers_Handler::setDesiredLocation(const Location& myDesiredLocation) {
+    m_desiredLocation = myDesiredLocation;
+}
+
+bool Barriers_Handler::isHorse(const Piece& m_Piece) {
     const wchar_t* blackHorse = L"\u2658";
     const wchar_t* whiteHorse = L"\u265E";
-    if (m_Piece->getColor() == Color::Black && *m_Piece->getUnicodeCharacter() == *blackHorse) {
+    if (m_Piece.getColor() == Color::Black && *m_Piece.getUnicodeCharacter() == *blackHorse) {
         return true;
     }
 
-    if (m_Piece->getColor() == Color::White && *m_Piece->getUnicodeCharacter() == *whiteHorse) {
+    if (m_Piece.getColor() == Color::White && *m_Piece.getUnicodeCharacter() == *whiteHorse) {
+        return true;
+    }
+    return false;
+}
+
+bool Barriers_Handler::isPawn(const Piece& m_Piece) {
+     const wchar_t* blackPawn = L"\u2659";
+    const wchar_t* whitePawn = L"\u265F";
+    if (m_Piece.getColor() == Color::Black && *m_Piece.getUnicodeCharacter() == *blackPawn) {
+        return true;
+    }
+
+    if (m_Piece.getColor() == Color::White && *m_Piece.getUnicodeCharacter() == *whitePawn) {
         return true;
     }
     return false;
@@ -49,20 +77,19 @@ bool Barriers_Handler::handleOnSameRow() {
     return goLeft();
 }
 
-bool Barriers_Handler::handlePrependicular() { 
-  
+bool Barriers_Handler::handlePrependicular() {
     if (isAbove()) {
         return isOnLeftAboveCorner() ? goLeftUp() : goRightUp();
-    }
-
+    } 
     return isOnRightBeneathCorner() ?  goRightDown() : goLeftDown();
+    return false;  
 }
 
 bool Barriers_Handler::goUp() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startY, startX] = m_Piece->getCurrentLocation();
-    auto [desiredY, desiredX] = *m_desiredLocation;
-    Location desiredLocation = *m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
+    Location desiredLocation = m_desiredLocation;
 
      for (int i{startY + 1}; i < desiredY; ++i) {
         desiredLocation.first = i;
@@ -75,9 +102,9 @@ bool Barriers_Handler::goUp() {
 
 bool Barriers_Handler::goDown() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startY, startX] = m_Piece->getCurrentLocation();
-    auto [desiredY, desiredX] = *m_desiredLocation;
-    Location desiredLocation = *m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
+    Location desiredLocation = m_desiredLocation;
 
      for (int i{startY - 1}; i > desiredY; --i) {
         desiredLocation.first = i;
@@ -90,9 +117,9 @@ bool Barriers_Handler::goDown() {
 
 bool Barriers_Handler::goRight() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startY, startX] = m_Piece->getCurrentLocation();
-    auto [desiredY, desiredX] = *m_desiredLocation;
-    Location desiredLocation = *m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
+    Location desiredLocation = m_desiredLocation;
 
      for (int i{startX + 1}; i < desiredX; ++i) {
         desiredLocation.second = i;
@@ -105,9 +132,9 @@ bool Barriers_Handler::goRight() {
 
 bool Barriers_Handler::goLeft() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startY, startX] = m_Piece->getCurrentLocation();
-    auto [desiredY, desiredX] = *m_desiredLocation;
-    Location desiredLocation = *m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
+    Location desiredLocation = m_desiredLocation;
 
      for (int i{startX - 1}; i > desiredX; --i) {
         desiredLocation.second = i;
@@ -118,15 +145,15 @@ bool Barriers_Handler::goLeft() {
      return true;
 }
 
-bool Barriers_Handler::goRightUp() {
-    auto [startY, startX] = m_Piece->getCurrentLocation();
-    auto [desiredY, desiredX] = *m_desiredLocation;
+bool Barriers_Handler::goRightDown() {
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Board* myBoard{Board::getInstance()}; 
-    Location desiredLocation = *m_desiredLocation;
+    Location desiredLocation = m_desiredLocation;
 
     for (int i{startX + 1}; i < desiredX; ++i) {
-        desiredLocation.first = ++desiredY;
-        desiredLocation.second = ++desiredX;
+        desiredLocation.first = --startY;
+        desiredLocation.second = ++startX;
         if (!(myBoard->isEmpty(desiredLocation).first)) {
             return false;
         }
@@ -134,16 +161,17 @@ bool Barriers_Handler::goRightUp() {
     return true;
 }
 
-bool Barriers_Handler::goRightDown() {
-    auto [startY, startX] = m_Piece->getCurrentLocation();
-    auto [desiredY, desiredX] = *m_desiredLocation;
+bool Barriers_Handler::goRightUp() { 
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Board* myBoard{Board::getInstance()}; 
-    Location desiredLocation = *m_desiredLocation;
+    Location desiredLocation = m_desiredLocation;
 
     for (int i{startX + 1}; i < desiredX; ++i) {
-        desiredLocation.first = --startY;
+        desiredLocation.first = ++startY;
         desiredLocation.second = ++startX;
-        if (!(myBoard->isEmpty(*m_desiredLocation).first)) {
+        
+        if (!(myBoard->isEmpty(desiredLocation).first)) {
             return false;
         }
      }
@@ -151,15 +179,15 @@ bool Barriers_Handler::goRightDown() {
 }
 
 bool Barriers_Handler::goLeftUp() {
-    auto [startY, startX] = m_Piece->getCurrentLocation();
-    auto [desiredY, desiredX] = *m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Board* myBoard{Board::getInstance()}; 
-    Location desiredLocation = *m_desiredLocation;
+    Location discovarableLocation = m_desiredLocation;
 
     for (int i{startX - 1}; i > desiredX; --i) {
-        desiredLocation.first = ++desiredY;
-        desiredLocation.second = --desiredX;
-        if (!myBoard->isEmpty(*m_desiredLocation).first) {
+        discovarableLocation.first = ++startY;
+        discovarableLocation.second = --startX;
+        if (!myBoard->isEmpty(discovarableLocation).first) {
             return false;
         }
      }
@@ -167,15 +195,15 @@ bool Barriers_Handler::goLeftUp() {
 }
 
 bool Barriers_Handler::goLeftDown() {
-    auto [startY, startX] = m_Piece->getCurrentLocation();
-    auto [desiredY, desiredX] = *m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Board* myBoard{Board::getInstance()}; 
-    Location desiredLocation = *m_desiredLocation;
+    Location discovarableLocation = m_desiredLocation;
 
     for (int i{startX - 1}; i > desiredX; --i) {
-        desiredLocation.first = --desiredY;
-        desiredLocation.second = --desiredX;
-        if (!myBoard->isEmpty(*m_desiredLocation).first) {
+        discovarableLocation.first = --startY;
+        discovarableLocation.second = --startX;
+        if (!myBoard->isEmpty(discovarableLocation).first) {
             return false;
         }
      }
@@ -183,19 +211,19 @@ bool Barriers_Handler::goLeftDown() {
 }
 
 bool Barriers_Handler::isOnRight() {
-   return  m_desiredLocation->second > m_Piece->getCurrentLocation().second ? true : false;
+   return  m_desiredLocation.second > m_currentLocation.second ? true : false;
 }
 
 bool Barriers_Handler::isAbove() {
-    return (m_desiredLocation->first > m_Piece->getCurrentLocation().first) ? true : false;
+    return (m_desiredLocation.first > m_currentLocation.first) ? true : false;
 }
 
 bool Barriers_Handler::isOnSameColum() {
-    return m_Piece->getCurrentLocation().second == m_desiredLocation->second ? true : false;
+    return m_currentLocation.second == m_desiredLocation.second ? true : false;
 }
 
 bool Barriers_Handler::isOnSameRow() {
-     return m_Piece->getCurrentLocation().first == m_desiredLocation->first ? true : false;
+     return m_currentLocation.first == m_desiredLocation.first ? true : false;
 }
 
 bool Barriers_Handler::isOnRightBeneathCorner() {
@@ -213,10 +241,3 @@ bool Barriers_Handler::isOnLeftAboveCorner() {
     return false;
 }
 
-void Barriers_Handler::setPiece(Piece& myPiece) {
-    m_Piece = &myPiece;
-}
-
-void Barriers_Handler::setLocation(Location& myLocation) {
-    m_desiredLocation = &myLocation;
-}

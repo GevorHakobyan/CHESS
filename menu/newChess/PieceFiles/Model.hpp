@@ -1,11 +1,12 @@
 #ifndef CHESS_MODEL_HPP
 #define CHESS_MODEL_HPP
 
-#include "Board.hpp"
+
 #include "PieceExistanceHandler.hpp"
 #include "AvailableCoordinatesHandler.hpp"
 #include "BarriersHandler.hpp"
 #include "desiredSquareHandler.hpp"
+#include "Board.hpp"
 
 using Map = std::unique_ptr<std::map<Location, Index>>;
 using UserInput = std::pair<Location, Location>;
@@ -24,11 +25,13 @@ class Model {
     void setMovedSquare_Character(const Location&);
     bool isEven(const int);
     bool isOdd(const int);
-    bool getColor(const Location&);
+    bool getSquareColor(const Location&);
+    Color getPieceColor(const Index&);
 
     private:
     bool isZero(const Location&, const Location&);
     void updateBoardMatrix(Index&, Index&);
+    void UpdatePiece_Data(Location&);
     void updateMap(Location&, Index&);
 
     private:

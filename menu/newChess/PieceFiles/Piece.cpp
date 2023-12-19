@@ -1,4 +1,5 @@
 #include "Piece.hpp"
+#include <ncurses.h>
 
 Piece::Piece(const std::string& color, const wchar_t* character, Location startLocation) {
     setUnicodeCharacter(character);

@@ -7,6 +7,7 @@ Knight::Knight(const std::string& color, const wchar_t* character, Location star
  };
 
  void Knight::updateAvailableCoordinates() {
+    m_Avialble_Coordinates.clear();
     setAvailableCoordinates();
  }
 void Knight::setAvailableCoordinates() {

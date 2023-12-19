@@ -8,6 +8,7 @@ Bishop::Bishop(const std::string& color, const wchar_t* character, Location star
 };
 
 void Bishop::updateAvailableCoordinates() {    
+  m_Avialble_Coordinates.clear();
   setAvailableCoordinates();
 }
 

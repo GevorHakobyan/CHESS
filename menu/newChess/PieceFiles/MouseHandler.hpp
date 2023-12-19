@@ -10,7 +10,6 @@ class MouseHandler {
     
     static MouseHandler* getInstance();  
     UserInput getUserInput(); 
-    UserInput getUserInput() const;
 
     private: 
     MouseHandler(); 

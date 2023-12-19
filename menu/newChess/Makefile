@@ -1,7 +1,7 @@
 CC = g++
-
+CFLAGS = -g -Wall
 SRC_DIR = PieceFiles
-INC_DIR = PieceFiles 
+INC_DIR = PieceFiles
 BUILD_DIR = build
 TARGET_DIR = bin
 
@@ -20,7 +20,11 @@ $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ -lncursesw
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(INC)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -c -o $@ $< 
+	$(CC) $(CFLAGS) -I$(INC_DIR) -c -o $@ $<
 
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET_DIR)
+
+.PHONY: debug
+debug: CFLAGS += -DDEBUG
+debug: all

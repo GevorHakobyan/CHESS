@@ -8,7 +8,6 @@ Queen::Queen(const std::string& color, const wchar_t* character, Location startL
 };
 
 void Queen::setAvailableCoordinates() {
-  mvprintw(0, 100, "%s", "I ammmmmmmmmm");
     setRowCoordinates();
     setColumCoordinates();
     setRightUpCoordinates();
@@ -18,7 +17,8 @@ void Queen::setAvailableCoordinates() {
 }
 
 void Queen::updateAvailableCoordinates() {
-    return;
+  m_Avialble_Coordinates.clear();
+  setAvailableCoordinates();
 }
 
 void Queen::setRowCoordinates() {

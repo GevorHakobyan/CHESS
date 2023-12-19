@@ -13,6 +13,7 @@ class Bishop : public Piece {
     void setLeftUpCoordinates();
     void setRightDownCoordinates();
     void setLeftDownCoordinates();
+    int a{0};
 };
 
 #endif
