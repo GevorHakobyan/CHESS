@@ -15,6 +15,7 @@ int main() {
     myController.setBoard();
     myController.Play();
    
+    clear();
     refresh();
     getch();
     endwin();

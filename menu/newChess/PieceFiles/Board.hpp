@@ -29,7 +29,6 @@ class Board {
     void swapPawnWith(const Index&, std::pair<const wchar_t*, Color>&, const Index&);
     PieceTypes determineCharacter(std::pair<const wchar_t*, Color>);
 
-
     private: 
     ~Board();
     Board();
@@ -37,7 +36,6 @@ class Board {
     void setBlackPieces();
     
     static Board* m_Board;
-    int a{0};
     PieceList m_pieceList;
 };
 #endif 

@@ -34,18 +34,22 @@ class Model {
     const PieceOptions& getPieceOptions() const;
     const PieceLocations& getPieceLocations() const;
     void ImplementUserChoice(const Location&, const UserInput&);
-    void setUserChoice_Character(const Location&); 
+    void setUserChoice_Character(const Location&);  
+    bool isGameFinished(); 
 
     private:
     void setEventInfo(const Color&, const Location&);
     void ActivateEventState();
-  
-    bool isZero(const Location&, const Location&);
+    bool isNullablePlace(const Location&, const Location&);
     void updateBoardMatrix(Index&, Index&);
     void UndoBoardUpdate(Index&, Index&);
     void UpdatePiece_Data(Location&);
     void UndoPieceData_Update(Location&);
     void updateMap(Location&, Index&);
+    void UndoStep(UserInput);
+    bool isStepValid(const UserInput&);
+    void takeStep(const Location&, Index);
+  
 
     private:
     static Model* m_Model;

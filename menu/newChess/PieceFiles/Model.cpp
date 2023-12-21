@@ -27,29 +27,29 @@ Model* Model::getInstance() {
 
 bool Model::Move(UserInput userInput) {
     auto[origin, destination] = userInput;
-    if (isZero(origin, destination)) {
+    if (isNullablePlace(origin, destination)) {
         return false;
     }
+
     const auto[y, x] = (*m_pieceMap)[origin];
-    destination = (*m_pieceMap)[destination];
+    destination = (*m_pieceMap)[destination]; 
+    Color pieceColor = m_pieceList[y][x].get()->getColor(); 
      
-    if (m_ExistanceHandler->handleRequest(*m_pieceList[y][x], destination)) {
-        Color pieceColor = m_pieceList[y][x].get()->getColor(); 
+    if (isStepValid(userInput)) {
+        takeStep(origin, destination);
 
-        setMovedPiece_Character(origin);
-        setMovedSquare_Character(origin);
-        updateBoardMatrix((*m_pieceMap)[origin], destination);    
-        UpdatePiece_Data(destination); 
-
-        if (Broker::isKingUnderCheck(pieceColor, destination)) {
-            UndoBoardUpdate((*m_pieceMap)[origin], destination);
-            UndoPieceData_Update((*m_pieceMap)[origin]);
-            m_QueHandler->m_que = (m_QueHandler->m_que) ? false : true;
+        if (Broker::isMyKingUnderCheck(pieceColor, destination)) {
+            UndoStep(userInput);
             return false;
         } 
 
+        const auto[Ynew, Xnew] = destination;
+        if (Broker::isEnemyKingUnderCheck((*m_pieceList[Ynew][Xnew]))) {
+            beep();
+        }
         return true;
     }
+
     if (m_pieceList[y][x] == nullptr) {
         return false;
     }
@@ -57,10 +57,11 @@ bool Model::Move(UserInput userInput) {
         ActivateEventState();
         setEventInfo(m_pieceList[y][x]->getColor(), userInput.second);
     }
+    beep();
     return false; 
 }
 
-bool Model::isZero(const Location& origin, const Location& destination) {
+bool Model::isNullablePlace(const Location& origin, const Location& destination) {
    if(0 == origin.first || 0 == origin.second) {
     return true;
    };
@@ -198,3 +199,33 @@ void Model::setUserChoice_Character(const Location& userChoice) {
     }
     m_Piece = const_cast<wchar_t*>(m_PieceOptions[2]);
 }
+
+void Model::UndoStep(UserInput userInput) {
+    auto[origin, destination] = userInput;
+    destination = (*m_pieceMap)[destination];
+
+    UndoBoardUpdate((*m_pieceMap)[origin], destination);
+    UndoPieceData_Update((*m_pieceMap)[origin]);
+    m_QueHandler->m_que = (m_QueHandler->m_que) ? false : true;
+    beep();
+}
+
+bool Model::isStepValid(const UserInput& userInput) {
+    auto[origin, destination] = userInput;
+    const auto[y, x] = (*m_pieceMap)[origin];
+    destination = (*m_pieceMap)[destination];
+
+     if (m_ExistanceHandler->handleRequest(*m_pieceList[y][x], destination)) {
+        return true;
+     }
+     return false;
+}
+
+void Model::takeStep(const Location& origin, Index destination) {
+    setMovedPiece_Character(origin);
+    setMovedSquare_Character(origin);
+    updateBoardMatrix((*m_pieceMap)[origin], destination);    
+    UpdatePiece_Data(destination);
+}
+
+

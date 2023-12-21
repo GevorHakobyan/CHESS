@@ -5,12 +5,6 @@ bool AvailableCoordinates_Handler::handleRequest(const Piece& m_Piece, const Loc
     
     AvailableCoordinates myPieceAvailableCoordinates = m_Piece.getAvailableCoordinates(); 
     move(0,0);
-    /*for (const auto& coordinate : myPieceAvailableCoordinates) {
-        printw("%d", coordinate.first);
-        printw(" ");
-        printw("%d", coordinate.second);
-        printw("\n");
-    }*/
      for (const auto& coordinate : myPieceAvailableCoordinates) {
         if (coordinate == m_desiredLocation) {
             answer = true;

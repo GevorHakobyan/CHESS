@@ -1,8 +1,6 @@
 #include "BarriersHandler.hpp"
 
 bool Barriers_Handler::handleRequest(const Piece& myPiece, const Location& mydesiredLocation) {
-    move(5, 0);
-    addwstr(myPiece.getUnicodeCharacter());
     setCurrentLocation(myPiece);
     setDesiredLocation(mydesiredLocation); 
   
