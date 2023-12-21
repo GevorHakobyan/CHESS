@@ -11,7 +11,7 @@ bool AbstractHandler::handleRequest(const Piece& myPiece, const Location& myLoca
     if (this->m_nextHandler != nullptr) {
         return this->m_nextHandler->handleRequest(myPiece, myLocation);
     }
-    return false;
+    return true;
 }
 
 

@@ -163,3 +163,19 @@ void MouseHandler::getCorrectedInput(int& realInput, int& fakeInput) {
     realInput = getch();
     fakeInput = getch();
 }
+
+Location MouseHandler::getUserChoice() {
+    keypad(stdscr, TRUE);
+    mousemask(ALL_MOUSE_EVENTS, NULL);
+    MEVENT event;
+    int realInput;
+    int fakeInput; 
+    Location choice;
+    getCorrectedInput(realInput, fakeInput);
+    
+    if (realInput == KEY_MOUSE && getmouse(&event) == OK) {
+        choice.first = event.y;
+        choice.second = event.x;
+    }
+    return choice;
+}

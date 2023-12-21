@@ -1,6 +1,8 @@
 #include "BarriersHandler.hpp"
 
 bool Barriers_Handler::handleRequest(const Piece& myPiece, const Location& mydesiredLocation) {
+    move(5, 0);
+    addwstr(myPiece.getUnicodeCharacter());
     setCurrentLocation(myPiece);
     setDesiredLocation(mydesiredLocation); 
   
@@ -10,7 +12,6 @@ bool Barriers_Handler::handleRequest(const Piece& myPiece, const Location& mydes
     }
 
     if (isOnSameColum()) { 
-        
         return handleOnSameColum()? AbstractHandler::handleRequest(myPiece, mydesiredLocation) : false;
     }
 
@@ -51,7 +52,7 @@ bool Barriers_Handler::isHorse(const Piece& m_Piece) {
 }
 
 bool Barriers_Handler::isPawn(const Piece& m_Piece) {
-     const wchar_t* blackPawn = L"\u2659";
+    const wchar_t* blackPawn = L"\u2659";
     const wchar_t* whitePawn = L"\u265F";
     if (m_Piece.getColor() == Color::Black && *m_Piece.getUnicodeCharacter() == *blackPawn) {
         return true;
@@ -146,9 +147,9 @@ bool Barriers_Handler::goLeft() {
 }
 
 bool Barriers_Handler::goRightDown() {
+    Board* myBoard{Board::getInstance()}; 
     auto [startY, startX] = m_currentLocation;
     auto [desiredY, desiredX] = m_desiredLocation;
-    Board* myBoard{Board::getInstance()}; 
     Location desiredLocation = m_desiredLocation;
 
     for (int i{startX + 1}; i < desiredX; ++i) {
@@ -162,9 +163,9 @@ bool Barriers_Handler::goRightDown() {
 }
 
 bool Barriers_Handler::goRightUp() { 
+    Board* myBoard{Board::getInstance()}; 
     auto [startY, startX] = m_currentLocation;
     auto [desiredY, desiredX] = m_desiredLocation;
-    Board* myBoard{Board::getInstance()}; 
     Location desiredLocation = m_desiredLocation;
 
     for (int i{startX + 1}; i < desiredX; ++i) {
@@ -174,14 +175,15 @@ bool Barriers_Handler::goRightUp() {
         if (!(myBoard->isEmpty(desiredLocation).first)) {
             return false;
         }
+            
      }
      return true;
 }
 
 bool Barriers_Handler::goLeftUp() {
+    Board* myBoard{Board::getInstance()}; 
     auto [startY, startX] = m_currentLocation;
     auto [desiredY, desiredX] = m_desiredLocation;
-    Board* myBoard{Board::getInstance()}; 
     Location discovarableLocation = m_desiredLocation;
 
     for (int i{startX - 1}; i > desiredX; --i) {
@@ -195,9 +197,9 @@ bool Barriers_Handler::goLeftUp() {
 }
 
 bool Barriers_Handler::goLeftDown() {
+    Board* myBoard{Board::getInstance()}; 
     auto [startY, startX] = m_currentLocation;
     auto [desiredY, desiredX] = m_desiredLocation;
-    Board* myBoard{Board::getInstance()}; 
     Location discovarableLocation = m_desiredLocation;
 
     for (int i{startX - 1}; i > desiredX; --i) {

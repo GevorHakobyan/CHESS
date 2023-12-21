@@ -15,6 +15,7 @@
 using  PieceList = std::array<std::array<std::unique_ptr<Piece>,8>,8>;
 using Location = std::pair<int, int>;
 using Index = std::pair<int, int>;
+enum class PieceTypes{Rook, Queen, Knight};
 
 class Board {
     public:
@@ -25,6 +26,9 @@ class Board {
     std::pair<bool, Color> isEmpty(Index);
     void updateMatrix(Index&, Index&);
     void updatePieceData(Location&);
+    void swapPawnWith(const Index&, std::pair<const wchar_t*, Color>&, const Index&);
+    PieceTypes determineCharacter(std::pair<const wchar_t*, Color>);
+
 
     private: 
     ~Board();

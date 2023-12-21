@@ -5,9 +5,9 @@
 #include "AbstractHandler.hpp"
 #include "Board.hpp"
 
-
 class Barriers_Handler : public AbstractHandler {
     public:
+    int a{55};
     Barriers_Handler() = default;
     bool handleRequest(const Piece&, const Location&) override;
     private:

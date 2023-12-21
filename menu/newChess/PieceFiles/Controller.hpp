@@ -13,11 +13,14 @@ class Controller {
     void Play();
 
     private:
-    void UpdateBoard_Data(Location&, Location&);
-    void UpdateBoard_View();
+    void CreatePawnEvent();
+    void printEventOptions(const PieceOptions&, const PieceLocations&);
+    Location getUserChoice();
+    std::optional<Location> evaluateChoice(const Location&);
+    std::optional<Location> approximateChoice(const Location&, const Location&);
+    void ImpelementGraphically(const PieceLocations&);
     void isMoveSuccessful(bool);
     Model* m_Model{nullptr};
-    //View* m_View{nullptr};
     Map m_PieceMap{nullptr};
     MouseHandler* m_Mouse{nullptr};
     UserInput m_UserInput;

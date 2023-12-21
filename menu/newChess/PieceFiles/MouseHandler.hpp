@@ -10,6 +10,7 @@ class MouseHandler {
     
     static MouseHandler* getInstance();  
     UserInput getUserInput(); 
+    Location getUserChoice();
 
     private: 
     MouseHandler(); 
