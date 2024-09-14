@@ -5,15 +5,15 @@
 
 
 class EnemyKing_Dispatcher : public Dispatcher{
-    public:
-    static EnemyKing_Dispatcher* getInstance();
+    public: //deleted ones
     EnemyKing_Dispatcher& operator=(const EnemyKing_Dispatcher&) = delete;
     EnemyKing_Dispatcher(const EnemyKing_Dispatcher&) = delete;
-    bool Dispatch(const Piece&);
+
+    public:
+    static EnemyKing_Dispatcher* getInstance();
+    bool Dispatch(const Piece&) override;
+
     private:
-    bool handlePawnCase(const Piece&, const Location&);
-    bool isPawn(const Piece&);
-    bool isOnSameColum(const Location&, const Location&);
     bool isAvailableFor_Me(const Piece&, const Location&);
     EnemyKing_Dispatcher();
     static EnemyKing_Dispatcher* m_Dispatcher;

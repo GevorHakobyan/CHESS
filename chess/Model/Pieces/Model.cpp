@@ -43,12 +43,12 @@ bool Model::Move(UserInput userInput) {
     if (isStepValid(userInput)) {
         takeStep(origin, destination);
 
-        if (Broker::isMyKingUnderCheck(pieceColor, destination)) {
+        const auto[Ynew, Xnew] = destination;
+        if (Broker::isMyKingUnderCheck((*m_pieceList[Ynew][Xnew]))) {
             UndoStep(userInput);
             return false;
         } 
 
-        const auto[Ynew, Xnew] = destination;
         if (Broker::isEnemyKingUnderCheck((*m_pieceList[Ynew][Xnew]))) {
             beep();
         }

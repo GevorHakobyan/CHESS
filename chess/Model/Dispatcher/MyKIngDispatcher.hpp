@@ -4,18 +4,15 @@
 #include "Dispatcher.hpp"
 
 class MyKingDispatcher : public Dispatcher {
-    public:
-    static MyKingDispatcher* getInstance();
+    public: //deleted ones
     MyKingDispatcher& operator=(const MyKingDispatcher&) = delete;
     MyKingDispatcher(const MyKingDispatcher&) = delete;
-    bool Dispatch(const Color);
+    public:
+    static MyKingDispatcher* getInstance();
+    bool Dispatch(const Piece&) override;
+    
     private:
     bool isAvailableFor_Enemy(const Location&, const Color);
-    bool SearchInAvailable_Coordinates(const Piece&, const Location&);
-    bool handlePawnCase(const Piece&, const Location&);
-    bool isPawn(const Piece&);
-    bool isOnSameColum(const Location&, const Location&);
-
     MyKingDispatcher();
     static MyKingDispatcher* m_Dispatcher;
     Barriers_Handler* m_Handler{nullptr};

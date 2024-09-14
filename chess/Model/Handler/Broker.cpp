@@ -30,7 +30,6 @@ Broker::Answer Broker::HandleIfPawn(const Piece& myPiece, const Location& desire
 
     std::get<1>(answer) = false;
     std::get<2>(answer) = false;
-    //answer.second = isEmpty(desiredLocation) ? true : !(Broker::isEnemy(desiredLocation, myPiece.getColor()));
     return answer;
 }
 bool Broker::isEnemy(const Location& m_desiredLocation, const Color& m_PieceColor ) {
@@ -122,9 +121,9 @@ PieceLocations Broker::getPieceLocations(const Location& destination) {
     return locations;
 }
 
-bool Broker::isMyKingUnderCheck(const Color pieceColor, const Location& myLocation) {
+bool Broker::isMyKingUnderCheck(const Piece& myPiece) {
     m_KingDispatcher = MyKingDispatcher::getInstance();
-    return m_KingDispatcher->Dispatch(pieceColor);
+    return m_KingDispatcher->Dispatch(myPiece);
 }
 
 bool Broker::isEnemyKingUnderCheck(const Piece& myPiece) {

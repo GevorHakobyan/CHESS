@@ -19,7 +19,7 @@ class Broker {
     static void CreatePawnEvent(const Location&, const Location&, const Color);
     static PieceOptions getPieceOptions(const Color&);
     static PieceLocations getPieceLocations(const Location&);
-    static bool isMyKingUnderCheck(const Color, const Location&);
+    static bool isMyKingUnderCheck(const Piece&);
     static bool isEnemyKingUnderCheck(const Piece&);
     private:
     static bool isOnSameColum(const Piece&, const Location&);
