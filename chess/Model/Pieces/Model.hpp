@@ -12,6 +12,9 @@
 using Map = std::unique_ptr<std::map<Location, Index>>;
 using UserInput = std::pair<Location, Location>;
 
+template <typename T>
+using HandlerPtr = std::shared_ptr<T>;
+
 class Model {
     public:
     static Model* getInstance();
@@ -40,7 +43,8 @@ class Model {
     private:
     void setEventInfo(const Color&, const Location&);
     void ActivateEventState();
-    bool isNullablePlace(const Location&, const Location&);
+    bool areSquaresValid(const Location&, const Location&);
+    bool isOriginNullable(const Location&) const;
     void updateBoardMatrix(Index&, Index&);
     void UndoBoardUpdate(Index&, Index&);
     void UpdatePiece_Data(Location&);
@@ -59,12 +63,11 @@ class Model {
     const PieceList& m_pieceList;
     wchar_t* m_Piece;
     wchar_t* m_Square;
-    //handlers
-    PieceExistanceHandler* m_ExistanceHandler{nullptr};
-    QueHandler* m_QueHandler{nullptr};
-    AvailableCoordinates_Handler* m_AvailableHandler{nullptr};
-    Barriers_Handler* m_BarriersHandler{nullptr};
-    DesiredSquare_Handler* m_DesiredHandler{nullptr};
+    HandlerPtr<PieceExistanceHandler> m_ExistanceHandler{nullptr};
+    HandlerPtr<QueHandler> m_QueHandler{nullptr};
+    HandlerPtr<AvailableCoordinates_Handler> m_AvailableHandler{nullptr};
+    HandlerPtr<Barriers_Handler> m_BarriersHandler{nullptr};
+    HandlerPtr<DesiredSquare_Handler> m_DesiredHandler{nullptr};
     //Event
     PieceOptions m_PieceOptions;
     std::vector<Location> m_PieceLocations;

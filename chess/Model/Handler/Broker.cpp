@@ -6,29 +6,31 @@ EnemyKing_Dispatcher* Broker::m_EnemyKingDispatcher{nullptr};
 bool Broker::isEmpty(const Location& m_desiredLocation) {
     Board* myBoard{Board::getInstance()}; 
 
-    return myBoard->isEmpty(m_desiredLocation).first ? true : false;
+    return myBoard->isEmpty(m_desiredLocation).first; 
 }
 
-std::pair<bool, bool> Broker::HandleIfPawn(const Piece& myPiece, const Location& desiredLocation) {
-    std::pair<bool, bool> answer;
+Broker::Answer Broker::HandleIfPawn(const Piece& myPiece, const Location& desiredLocation) {
+    std::tuple<bool, bool, bool> answer;
     if (!isPawn(myPiece)) {
-        answer.first = false;
-        answer.second = false;
-        return answer;
+        return {false, false, false};
     }
-    answer.first = true;
+    std::get<0>(answer) = true;
 
     if (isPawnEventTime(myPiece, desiredLocation)) {
-        answer.second = true;
+        std::get<1>(answer) = true;
+        std::get<2>(answer) = false;
         return answer;
     }
 
     if (isOnSameColum(myPiece, desiredLocation)) {
-        answer.second = !isEmpty(desiredLocation);
+        std::get<1>(answer) = false;
+        std::get<2>(answer) = true;
         return answer;
     }
 
-    answer.second = isEmpty(desiredLocation) ? true : !(Broker::isEnemy(desiredLocation, myPiece.getColor()));
+    std::get<1>(answer) = false;
+    std::get<2>(answer) = false;
+    //answer.second = isEmpty(desiredLocation) ? true : !(Broker::isEnemy(desiredLocation, myPiece.getColor()));
     return answer;
 }
 bool Broker::isEnemy(const Location& m_desiredLocation, const Color& m_PieceColor ) {

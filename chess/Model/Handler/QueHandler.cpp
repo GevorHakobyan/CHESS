@@ -10,5 +10,4 @@ bool QueHandler::handleRequest(const Piece& myPiece, const Location& myLocation)
         return true;
     }
     return false;
-
 }

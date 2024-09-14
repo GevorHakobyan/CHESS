@@ -6,11 +6,12 @@ Model::Model()
 : m_Board{Board::getInstance()}, m_pieceList{m_Board->getPieceList()}
 {
     m_Board  = Board::getInstance();
-    m_ExistanceHandler = new PieceExistanceHandler;
-    m_QueHandler = new QueHandler;
-    m_AvailableHandler = new AvailableCoordinates_Handler;
-    m_BarriersHandler = new Barriers_Handler;
-    m_DesiredHandler = new DesiredSquare_Handler;
+    m_ExistanceHandler = std::make_shared<PieceExistanceHandler>(PieceExistanceHandler());
+    m_QueHandler = std::make_shared<QueHandler>(QueHandler());
+    m_AvailableHandler = std::make_shared<AvailableCoordinates_Handler>(AvailableCoordinates_Handler());
+    m_BarriersHandler = std::make_shared<Barriers_Handler>(Barriers_Handler());
+    m_DesiredHandler = std::make_shared<DesiredSquare_Handler>(DesiredSquare_Handler());
+    
     m_ExistanceHandler->setNextHandler(m_AvailableHandler);
     m_AvailableHandler->setNextHandler(m_BarriersHandler);
     m_BarriersHandler->setNextHandler(m_DesiredHandler);
@@ -27,12 +28,16 @@ Model* Model::getInstance() {
 
 bool Model::Move(UserInput userInput) {
     auto[origin, destination] = userInput;
-    if (isNullablePlace(origin, destination)) {
+    if (areSquaresValid(origin, destination)) {
         return false;
     }
 
     const auto[y, x] = (*m_pieceMap)[origin];
     destination = (*m_pieceMap)[destination]; 
+    if (isOriginNullable(origin)) {
+        return false;
+    }
+
     Color pieceColor = m_pieceList[y][x].get()->getColor(); 
      
     if (isStepValid(userInput)) {
@@ -50,9 +55,6 @@ bool Model::Move(UserInput userInput) {
         return true;
     }
 
-    if (m_pieceList[y][x] == nullptr) {
-        return false;
-    }
     if(Broker::isPawnEventTime(*m_pieceList[y][x], destination)) {
         ActivateEventState();
         setEventInfo(m_pieceList[y][x]->getColor(), userInput.second);
@@ -61,11 +63,19 @@ bool Model::Move(UserInput userInput) {
     return false; 
 }
 
-bool Model::isNullablePlace(const Location& origin, const Location& destination) {
+bool Model::areSquaresValid(const Location& origin, const Location& destination) {
    if(0 == origin.first || 0 == origin.second) {
     return true;
    };
    return  (0 == destination.first || 0 == destination.second) ? true : false;
+}
+
+bool Model::isOriginNullable(const Location& origin) const {
+    const auto[y, x] = (*m_pieceMap)[origin];
+    if (!m_pieceList[y][x].get()) {
+        return true;
+    }
+    return false;
 }
 
 void Model::updateMap(Location& location, Index& pieceIndex) {
@@ -207,7 +217,6 @@ void Model::UndoStep(UserInput userInput) {
     UndoBoardUpdate((*m_pieceMap)[origin], destination);
     UndoPieceData_Update((*m_pieceMap)[origin]);
     m_QueHandler->m_que = (m_QueHandler->m_que) ? false : true;
-    beep();
 }
 
 bool Model::isStepValid(const UserInput& userInput) {

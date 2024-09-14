@@ -10,8 +10,9 @@ using PieceLocations = std::vector<Location>;
 
 class Broker {
     public :
+    using Answer = std::tuple<bool, bool, bool>;
     Broker() = default;
-    static std::pair<bool, bool> HandleIfPawn(const Piece&, const Location&);
+    static Answer HandleIfPawn(const Piece&, const Location&);
     static bool isEmpty(const Location&);
     static bool isEnemy(const Location&, const Color&);
     static bool isPawnEventTime(const Piece&, const Location&);

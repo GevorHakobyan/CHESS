@@ -42,14 +42,42 @@ bool MyKingDispatcher::isAvailableFor_Enemy(const Location& KingLocation, const 
 }
 
 bool MyKingDispatcher::SearchInAvailable_Coordinates(const Piece& myPiece, const Location& KingLocation) {
+     if (isPawn(myPiece)) {
+        return handlePawnCase(myPiece, KingLocation);
+    }
+    
     const AvailableCoordinates& m_Avaialble = myPiece.getAvailableCoordinates();
-
     for (const auto& coordinate : m_Avaialble) { 
         if (coordinate == KingLocation) {
             if (m_Handler->handleRequest(myPiece, KingLocation)) {
                 return true;
             }
             
+        }
+    }
+    return false;
+}
+
+bool MyKingDispatcher::isPawn(const Piece& myPiece) {
+    const wchar_t* character = myPiece.getUnicodeCharacter();
+    const wchar_t* blackPawn  = L"\u2659";
+    const wchar_t* whitePawn  = L"\u265F";
+
+    return (*character ==  *blackPawn || *character ==  *whitePawn) ? true : false;
+}
+
+bool MyKingDispatcher::isOnSameColum(const Location& myLocation, const Location& KingLocation) {
+    return myLocation.second == KingLocation.second;
+}
+
+bool MyKingDispatcher::handlePawnCase(const Piece& myPiece, const Location& KingLocation) {
+    const AvailableCoordinates& availableCoordinates = myPiece.getAvailableCoordinates();
+
+    for (const auto& coordinate : availableCoordinates) {
+        if (coordinate == KingLocation && !isOnSameColum(coordinate, KingLocation)) {
+            if (m_Handler->handleRequest(myPiece, KingLocation) ) {
+                return true;
+            }
         }
     }
     return false;

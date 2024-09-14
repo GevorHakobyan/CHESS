@@ -12,6 +12,10 @@ class MyKingDispatcher : public Dispatcher {
     private:
     bool isAvailableFor_Enemy(const Location&, const Color);
     bool SearchInAvailable_Coordinates(const Piece&, const Location&);
+    bool handlePawnCase(const Piece&, const Location&);
+    bool isPawn(const Piece&);
+    bool isOnSameColum(const Location&, const Location&);
+
     MyKingDispatcher();
     static MyKingDispatcher* m_Dispatcher;
     Barriers_Handler* m_Handler{nullptr};

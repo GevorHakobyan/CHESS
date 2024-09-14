@@ -5,7 +5,8 @@
 
 class Handler {
     public:
-    virtual Handler* setNextHandler(Handler*) = 0;
+    using HandlerPtr = std::unique_ptr<Handler>;
+    virtual HandlerPtr setNextHandler(HandlerPtr) = 0;
     virtual bool handleRequest(const Piece&, const Location&) = 0;
 };
 

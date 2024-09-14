@@ -2,26 +2,25 @@
 
 bool Barriers_Handler::handleRequest(const Piece& myPiece, const Location& mydesiredLocation) {
     setCurrentLocation(myPiece);
-    setDesiredLocation(mydesiredLocation); 
+    setDesiredLocation(mydesiredLocation);  
   
     if (isHorse(myPiece)) {
-        
+        return AbstractHandler::handleRequest(myPiece, mydesiredLocation);
+    }
+
+    if (isPawn(myPiece)) {
         return AbstractHandler::handleRequest(myPiece, mydesiredLocation);
     }
 
     if (isOnSameColum()) { 
         return handleOnSameColum()? AbstractHandler::handleRequest(myPiece, mydesiredLocation) : false;
     }
-
+    
+    
     if (isOnSameRow()) { 
-        
         return handleOnSameRow() ? AbstractHandler::handleRequest(myPiece, mydesiredLocation) : false;
-    }
-
-    if (isPawn(myPiece)) {
-        return AbstractHandler::handleRequest(myPiece, mydesiredLocation);
     } 
-   
+
     if (handlePrependicular()) {
         return AbstractHandler::handleRequest(myPiece, mydesiredLocation);
     }
@@ -96,6 +95,7 @@ bool Barriers_Handler::goUp() {
             return false;
         }
      }
+   
      return true;
 }
 

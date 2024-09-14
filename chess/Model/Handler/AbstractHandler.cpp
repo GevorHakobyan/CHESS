@@ -1,7 +1,7 @@
 #include "AbstractHandler.hpp"
 #include <utility>
 
-Handler* AbstractHandler::setNextHandler(Handler* handler) {
+AbstractHandler::HandlerPtr AbstractHandler::setNextHandler(HandlerPtr handler) {
     this->m_nextHandler = handler;
     return handler;
 }

@@ -42,6 +42,6 @@ class Piece {
     AvailableCoordinates m_Avialble_Coordinates{};
     std::unique_ptr<const wchar_t*> m_unicodeCharacter{nullptr};
     Color m_color{Color::Unknown};
-    int a{0};
+    //int a{0};
 };
 #endif

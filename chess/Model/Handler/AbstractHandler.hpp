@@ -1,15 +1,18 @@
 #ifndef ABSTRACT_HANDLER_HPP
 #define ABSTRACT_HANDLER_HPP
 
-#include "Handler.hpp"
+//#include "Handler.hpp"
+#include <memory>
+#include "Piece.hpp"
 
-class AbstractHandler : public Handler {
+class AbstractHandler {
     public:
+    using HandlerPtr = std::shared_ptr<AbstractHandler>;
     AbstractHandler() = default;
-    Handler* setNextHandler(Handler*) override;
-    bool handleRequest(const Piece&, const Location&) override;
+    HandlerPtr setNextHandler(HandlerPtr);
+    virtual bool handleRequest(const Piece&, const Location&);
     protected:
-    Handler* m_nextHandler{nullptr};
+    HandlerPtr m_nextHandler;
 };
 
 #endif
