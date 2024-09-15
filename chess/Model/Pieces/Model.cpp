@@ -45,11 +45,19 @@ bool Model::Move(UserInput userInput) {
 
         const auto[Ynew, Xnew] = destination;
         if (Broker::isMyKingUnderCheck((*m_pieceList[Ynew][Xnew]))) {
+            if (Broker::isKingKilled((*m_pieceList[Ynew][Xnew]))) {
+                return false; //game finished I loose
+                //dosn't work right
+            }
             UndoStep(userInput);
             return false;
         } 
 
         if (Broker::isEnemyKingUnderCheck((*m_pieceList[Ynew][Xnew]))) {
+           if(Broker::isKingKilled((*m_pieceList[Ynew][Xnew]))) {
+            return false; //game finished I won 
+            //dosn't work right
+           }
             beep();
         }
         return true;
@@ -237,4 +245,6 @@ void Model::takeStep(const Location& origin, Index destination) {
     UpdatePiece_Data(destination);
 }
 
+bool Model::isGameFinished() const {
 
+}

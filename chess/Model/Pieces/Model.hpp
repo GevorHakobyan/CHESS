@@ -38,7 +38,7 @@ class Model {
     const PieceLocations& getPieceLocations() const;
     void ImplementUserChoice(const Location&, const UserInput&);
     void setUserChoice_Character(const Location&);  
-    bool isGameFinished(); 
+    bool isGameFinished() const; 
 
     private:
     void setEventInfo(const Color&, const Location&);

@@ -9,8 +9,11 @@ using PieceOptions = std::vector<const wchar_t*>;
 using PieceLocations = std::vector<Location>;
 
 class Broker {
-    public :
+    public://usings
     using Answer = std::tuple<bool, bool, bool>;
+    using MyKingDispatcherPtr = std::unique_ptr<MyKingDispatcher>;
+    using EnemyKingDispatcherPtr = std::unique_ptr<EnemyKing_Dispatcher>;
+    public: //methods
     Broker() = default;
     static Answer HandleIfPawn(const Piece&, const Location&);
     static bool isEmpty(const Location&);
@@ -21,12 +24,13 @@ class Broker {
     static PieceLocations getPieceLocations(const Location&);
     static bool isMyKingUnderCheck(const Piece&);
     static bool isEnemyKingUnderCheck(const Piece&);
+    static bool isKingKilled(const Piece&);
     private:
     static bool isOnSameColum(const Piece&, const Location&);
     static bool isPawn(const Piece&);
     private:
-    static MyKingDispatcher* m_KingDispatcher;
-    static EnemyKing_Dispatcher* m_EnemyKingDispatcher;
+    static MyKingDispatcherPtr m_KingDispatcher;
+    static EnemyKingDispatcherPtr m_EnemyKingDispatcher;
 };
 
 #endif

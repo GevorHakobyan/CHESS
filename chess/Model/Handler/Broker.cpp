@@ -1,7 +1,7 @@
 #include "Broker.hpp"
 
-MyKingDispatcher* Broker::m_KingDispatcher{nullptr};
-EnemyKing_Dispatcher* Broker::m_EnemyKingDispatcher{nullptr};
+Broker::MyKingDispatcherPtr Broker::m_KingDispatcher{MyKingDispatcher::getInstance()};
+Broker::EnemyKingDispatcherPtr Broker::m_EnemyKingDispatcher{EnemyKing_Dispatcher::getInstance()};
 
 bool Broker::isEmpty(const Location& m_desiredLocation) {
     Board* myBoard{Board::getInstance()}; 
@@ -122,12 +122,16 @@ PieceLocations Broker::getPieceLocations(const Location& destination) {
 }
 
 bool Broker::isMyKingUnderCheck(const Piece& myPiece) {
-    m_KingDispatcher = MyKingDispatcher::getInstance();
+    //m_KingDispatcher = MyKingDispatcher::getInstance();
     return m_KingDispatcher->Dispatch(myPiece);
 }
 
 bool Broker::isEnemyKingUnderCheck(const Piece& myPiece) {
-    m_EnemyKingDispatcher = EnemyKing_Dispatcher::getInstance();
+    //m_EnemyKingDispatcher = EnemyKing_Dispatcher::getInstance();
     return m_EnemyKingDispatcher->Dispatch(myPiece);
+}
+
+bool Broker::isKingKilled(const Piece& myPiece) {
+
 }
 
