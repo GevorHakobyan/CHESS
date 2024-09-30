@@ -4,6 +4,7 @@
 #include "Board.hpp"
 #include "MyKIngDispatcher.hpp"
 #include "Enemy_KingDispatcher.hpp"
+#include "GameState_Dispatcher.hpp"
 
 using PieceOptions = std::vector<const wchar_t*>;
 using PieceLocations = std::vector<Location>;
@@ -11,8 +12,9 @@ using PieceLocations = std::vector<Location>;
 class Broker {
     public://usings
     using Answer = std::tuple<bool, bool, bool>;
-    using MyKingDispatcherPtr = std::unique_ptr<MyKingDispatcher>;
-    using EnemyKingDispatcherPtr = std::unique_ptr<EnemyKing_Dispatcher>;
+    using MyKingDispatcherPtr = std::shared_ptr<MyKingDispatcher>;
+    using EnemyKingDispatcherPtr = std::shared_ptr<EnemyKing_Dispatcher>;
+    using GameStatePtr = std::shared_ptr<GameStateDispatcher>;
     public: //methods
     Broker() = default;
     static Answer HandleIfPawn(const Piece&, const Location&);
@@ -31,6 +33,7 @@ class Broker {
     private:
     static MyKingDispatcherPtr m_KingDispatcher;
     static EnemyKingDispatcherPtr m_EnemyKingDispatcher;
+    static GameStatePtr m_GameStateDispatcher; 
 };
 
 #endif

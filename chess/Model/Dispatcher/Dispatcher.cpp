@@ -20,7 +20,7 @@ bool Dispatcher::isKingAvailable(const Location& KingLocation, const Color enemy
     return false;
 }
 
-bool Dispatcher::SearchInAvailable_Coordinates(const Piece& myPiece, const Location& KingLocation) {
+bool Dispatcher::SearchInAvailable_Coordinates(const Piece& myPiece, const Location& KingLocation) const {
     if (isPawn(myPiece)) {
         return handlePawnCase(myPiece, KingLocation);
     }
@@ -29,6 +29,8 @@ bool Dispatcher::SearchInAvailable_Coordinates(const Piece& myPiece, const Locat
     for (const auto& coordinate : m_Avaialble) { 
         if (coordinate == KingLocation) {
             if (m_Handler->handleRequest(myPiece, KingLocation)) {
+                //get the invading path
+                const auto InvadingPath = m_Handler->getInvadingPath();
                 return true;
             } 
         }
@@ -49,7 +51,7 @@ Location Dispatcher::determineKingLocation(const wchar_t* King) {
    }
 }
 
-bool Dispatcher::isPawn(const Piece& myPiece) {
+bool Dispatcher::isPawn(const Piece& myPiece) const {
     const wchar_t* character = myPiece.getUnicodeCharacter();
     const wchar_t* blackPawn  = L"\u2659";
     const wchar_t* whitePawn  = L"\u265F";
@@ -59,7 +61,7 @@ bool Dispatcher::isPawn(const Piece& myPiece) {
 
     
 
-bool Dispatcher::handlePawnCase(const Piece& myPiece, const Location& KingLocation) {
+bool Dispatcher::handlePawnCase(const Piece& myPiece, const Location& KingLocation) const {
     const AvailableCoordinates& availableCoordinates = myPiece.getAvailableCoordinates();
 
     for (const auto& coordinate : availableCoordinates) {
@@ -72,7 +74,7 @@ bool Dispatcher::handlePawnCase(const Piece& myPiece, const Location& KingLocati
     return false;
 }
 
-bool Dispatcher::isOnSameColum(const Location& myLocation, const Location& KingLocation) {
+bool Dispatcher::isOnSameColum(const Location& myLocation, const Location& KingLocation) const {
     return myLocation.second == KingLocation.second;
 }
 

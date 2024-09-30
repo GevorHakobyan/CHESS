@@ -1,14 +1,13 @@
 #include "MyKIngDispatcher.hpp"
 
-MyKingDispatcher* MyKingDispatcher::m_Dispatcher{nullptr};
+MyKingDispatcher::thisPtr MyKingDispatcher::m_Dispatcher{nullptr};
 
 MyKingDispatcher::MyKingDispatcher() {
-    m_Handler = new Barriers_Handler;
     m_Handler->setNextHandler(nullptr);
 }
-MyKingDispatcher* MyKingDispatcher::getInstance() {
+MyKingDispatcher::thisPtr MyKingDispatcher::getInstance() {
     if (m_Dispatcher == nullptr) {
-        m_Dispatcher = new MyKingDispatcher;
+        m_Dispatcher.reset(new MyKingDispatcher);
     }
     return m_Dispatcher;
 }

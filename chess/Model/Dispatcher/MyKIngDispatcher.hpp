@@ -4,18 +4,20 @@
 #include "Dispatcher.hpp"
 
 class MyKingDispatcher : public Dispatcher {
+    public:
+    using thisPtr = std::shared_ptr<MyKingDispatcher>;
     public: //deleted ones
     MyKingDispatcher& operator=(const MyKingDispatcher&) = delete;
     MyKingDispatcher(const MyKingDispatcher&) = delete;
     public:
-    static MyKingDispatcher* getInstance();
+    static thisPtr getInstance();
     bool Dispatch(const Piece&) override;
+    ~MyKingDispatcher()  =default;
     
     private:
     bool isAvailableFor_Enemy(const Location&, const Color);
     MyKingDispatcher();
-    static MyKingDispatcher* m_Dispatcher;
-    Barriers_Handler* m_Handler{nullptr};
+    static thisPtr m_Dispatcher;
 };
 
 #endif

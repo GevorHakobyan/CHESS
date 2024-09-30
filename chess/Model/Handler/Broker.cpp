@@ -2,6 +2,7 @@
 
 Broker::MyKingDispatcherPtr Broker::m_KingDispatcher{MyKingDispatcher::getInstance()};
 Broker::EnemyKingDispatcherPtr Broker::m_EnemyKingDispatcher{EnemyKing_Dispatcher::getInstance()};
+Broker::GameStatePtr Broker::m_GameStateDispatcher{GameStateDispatcher::getInstance()};
 
 bool Broker::isEmpty(const Location& m_desiredLocation) {
     Board* myBoard{Board::getInstance()}; 
@@ -131,7 +132,9 @@ bool Broker::isEnemyKingUnderCheck(const Piece& myPiece) {
     return m_EnemyKingDispatcher->Dispatch(myPiece);
 }
 
-bool Broker::isKingKilled(const Piece& myPiece) {
-
+bool Broker::isKingKilled(const Piece& Invador) {
+    const auto& InvadingPath = m_EnemyKingDispatcher->getInvadingPath();
+    m_GameStateDispatcher->setInvadingPath(InvadingPath);
+    return m_GameStateDispatcher->Dispatch(Invador);
 }
 

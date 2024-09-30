@@ -8,6 +8,7 @@
 
 using Location = std::pair<int, int>;
 using AvailableCoordinates = std::vector<Location>;
+
 enum class Color{Black, White, Unknown};
 
 class Piece {
