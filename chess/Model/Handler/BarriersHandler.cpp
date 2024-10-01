@@ -3,7 +3,6 @@
 bool Barriers_Handler::handleRequest(const Piece& myPiece, const Location& mydesiredLocation) {
     setCurrentLocation(myPiece);
     setDesiredLocation(mydesiredLocation);  
-    addTo_InvadingPath(m_currentLocation);
   
     if (isHorse(myPiece)) {
         return AbstractHandler::handleRequest(myPiece, mydesiredLocation);
@@ -93,10 +92,8 @@ bool Barriers_Handler::goUp() {
      for (int i{startY + 1}; i < desiredY; ++i) {
         desiredLocation.first = i;
         if (!myBoard->isEmpty(desiredLocation).first) {
-            eraseInvadingPath();
             return false;
         }
-        addTo_InvadingPath(desiredLocation);
      }
 
      return true;
@@ -111,10 +108,8 @@ bool Barriers_Handler::goDown() {
      for (int i{startY - 1}; i > desiredY; --i) {
         desiredLocation.first = i;
         if (!myBoard->isEmpty(desiredLocation).first) {
-            eraseInvadingPath();
             return false;
         }
-        addTo_InvadingPath(desiredLocation);
      }
      return true;
 }
@@ -128,10 +123,8 @@ bool Barriers_Handler::goRight() {
      for (int i{startX + 1}; i < desiredX; ++i) {
         desiredLocation.second = i;
         if (!myBoard->isEmpty(desiredLocation).first) {
-            eraseInvadingPath();
             return false;
         }
-        addTo_InvadingPath(desiredLocation);
      }
      return true;
 }
@@ -145,10 +138,8 @@ bool Barriers_Handler::goLeft() {
      for (int i{startX - 1}; i > desiredX; --i) {
         desiredLocation.second = i;
         if (!myBoard->isEmpty(desiredLocation).first) {
-            eraseInvadingPath();
             return false;
         }
-        addTo_InvadingPath(desiredLocation);
      }
      return true;
 }
@@ -163,10 +154,8 @@ bool Barriers_Handler::goRightDown() {
         desiredLocation.first = --startY;
         desiredLocation.second = ++startX;
         if (!(myBoard->isEmpty(desiredLocation).first)) {
-            eraseInvadingPath();
             return false;
         }
-        addTo_InvadingPath(desiredLocation);
      }
     return true;
 }
@@ -182,10 +171,8 @@ bool Barriers_Handler::goRightUp() {
         desiredLocation.second = ++startX;
 
         if (!(myBoard->isEmpty(desiredLocation).first)) {
-            eraseInvadingPath();
             return false;
         }
-        addTo_InvadingPath(desiredLocation); 
 
      }
      return true;
@@ -202,11 +189,9 @@ bool Barriers_Handler::goLeftUp() {
         discovarableLocation.second = --startX;
 
         if (!myBoard->isEmpty(discovarableLocation).first) {
-            eraseInvadingPath();
             return false;
         }
 
-        addTo_InvadingPath(m_desiredLocation);
      }
      return true;
 }
@@ -222,11 +207,8 @@ bool Barriers_Handler::goLeftDown() {
         discovarableLocation.second = --startX;
 
         if (!myBoard->isEmpty(discovarableLocation).first) {
-            eraseInvadingPath();
             return false;
         }
-        addTo_InvadingPath(m_desiredLocation);
-        
      }
      return true;
 }
@@ -260,16 +242,4 @@ bool Barriers_Handler::isOnLeftAboveCorner() {
         return true;
     }
     return false;
-}
-
-void Barriers_Handler::addTo_InvadingPath(const Location& coordinate) {
-    m_invadingPath.push_back(coordinate);
-}
-
-Barriers_Handler::Path Barriers_Handler::getInvadingPath() {
-    return m_invadingPath;
-}
-
-void Barriers_Handler::eraseInvadingPath() {
-    m_invadingPath.erase(m_invadingPath.begin(), m_invadingPath.end());
 }

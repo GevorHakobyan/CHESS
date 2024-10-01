@@ -13,10 +13,6 @@ EnemyKing_Dispatcher::thisPtr EnemyKing_Dispatcher::getInstance() {
     return m_Dispatcher;
 }
 
-const EnemyKing_Dispatcher::Path& EnemyKing_Dispatcher::getInvadingPath() const {
-    return m_InvadingPath;
-}
-
 bool EnemyKing_Dispatcher::Dispatch(const Piece& myPiece) {
     const wchar_t* King = (myPiece.getColor() == Color::Black) ? L"\u265A": L"\u2654";
     Location KingLocation = determineKingLocation(King);
@@ -25,9 +21,7 @@ bool EnemyKing_Dispatcher::Dispatch(const Piece& myPiece) {
 } 
 
 bool EnemyKing_Dispatcher::isAvailableFor_Me(const Piece& myPiece, const Location& KingLocation) {
-    bool answer = SearchInAvailable_Coordinates(myPiece, KingLocation);
-    m_InvadingPath = (answer) ? m_Handler->getInvadingPath() : m_InvadingPath;
-    return answer;
+     return SearchInAvailable_Coordinates(myPiece, KingLocation);
 }
 
 

@@ -133,8 +133,6 @@ bool Broker::isEnemyKingUnderCheck(const Piece& myPiece) {
 }
 
 bool Broker::isKingKilled(const Piece& Invador) {
-    const auto& InvadingPath = m_EnemyKingDispatcher->getInvadingPath();
-    m_GameStateDispatcher->setInvadingPath(InvadingPath);
     return m_GameStateDispatcher->Dispatch(Invador);
 }
 

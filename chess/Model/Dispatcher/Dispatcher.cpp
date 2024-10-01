@@ -30,7 +30,6 @@ bool Dispatcher::SearchInAvailable_Coordinates(const Piece& myPiece, const Locat
         if (coordinate == KingLocation) {
             if (m_Handler->handleRequest(myPiece, KingLocation)) {
                 //get the invading path
-                const auto InvadingPath = m_Handler->getInvadingPath();
                 return true;
             } 
         }

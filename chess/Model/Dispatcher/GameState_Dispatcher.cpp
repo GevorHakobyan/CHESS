@@ -20,10 +20,6 @@ bool GameStateDispatcher::isGameInDeadState() const {
     return isKingKilled();
 }
 
-void GameStateDispatcher::setInvadingPath(const Path& invadingPath) {
-    m_invadingPath = invadingPath;
-}
-
 const GameStateDispatcher::PiecePtr GameStateDispatcher::findKing(const Piece& invador) {
     const auto boardPtr = Board::getInstance();
     const auto& pieceList = boardPtr->getPieceList();
@@ -54,84 +50,86 @@ void GameStateDispatcher::setInvador(const Piece& piece) {
 }
 
 bool GameStateDispatcher::isKingKilled() const { 
-    const auto& escapingPath = findSafeLocations();
+    const auto& escapingPath = findEscapingPath(); //from this check only
+    bool isSafe = isAnySafe(escapingPath);
     return false;
 }
 
-GameStateDispatcher::Path GameStateDispatcher::findSafeLocations() const {
+GameStateDispatcher::Path GameStateDispatcher::findEscapingPath() const {
     //left and right in point of king 
     if (isInvadorPawn()) {
         return takePawnSafePlaces();
     }
 
-    if(isInvadorHorse()) {
-        return takeKnightSafePlaces();
+    const auto& kingCoordinates = m_King->getAvailableCoordinates();
+    Path escapingPath;
+
+    for (const auto& coordinate : kingCoordinates) {
+        if (!isAvailableForInvador(coordinate)) {
+            escapingPath.push_back(coordinate);
+        }    
     }
-
-    const auto& direction = determineCheckDirection();
-
-    if (direction == CheckDirection::Horizontal) {
-        return takeUpandDown();
-    } 
-
-    if (direction == CheckDirection::Vertical) {
-        return takeRightandLeft();
-    }
-
-    if(direction == CheckDirection::L_Diagonal) {
-        return takeRUandLD();
-    }
-
-    return takeRUandLD();
+    return escapingPath;
 }
 
-GameStateDispatcher::CheckDirection GameStateDispatcher::determineCheckDirection() const {
-    const auto&[invY, invX] = m_invadingPath[0];
-    const auto&[kingY, kingX] = m_King->getCurrentLocation();
-
-    if (invY == kingY) {
-        return CheckDirection::Vertical;
-    }
-
-    if (invX == kingX) {
-        return CheckDirection::Horizontal;
-    }
-
-    if(invX > kingX) {
-        return (invY > kingY) ? CheckDirection::R_Diagonal : CheckDirection::L_Diagonal;
-    }
-
-    return (invY < kingY) ? CheckDirection::R_Diagonal : CheckDirection::L_Diagonal;
-}
 
 bool GameStateDispatcher::isInvadorPawn() const {
-    return (m_invador->getUnicodeCharacter() == L"\u2659" || m_invador->getUnicodeCharacter() ==  L"\u265F");
+    const auto blackPawn = L"\u2659";
+    const auto whitePawn = L"\u265F";
+    return (*(m_invador->getUnicodeCharacter()) == *blackPawn || *(m_invador->getUnicodeCharacter()) ==  *whitePawn);
 }
 
-bool GameStateDispatcher::isInvadorHorse() const {
-    return (m_invador->getUnicodeCharacter() ==  L"\u265E" || m_invador->getUnicodeCharacter() ==  L"\u2658");
-}
+bool GameStateDispatcher::isAvailableForInvador(const Location& coordinate) const {
+    const auto& invadorCoordinates = m_invador->getAvailableCoordinates();
 
-GameStateDispatcher::Path GameStateDispatcher::takeKnightSafePlaces() const {
-    return Path{};
+    for (const auto& location : invadorCoordinates) {
+        if(location == coordinate) {
+            return true;
+        }
+    }
+    return true;
 }
 
 GameStateDispatcher::Path GameStateDispatcher::takePawnSafePlaces() const {
-    return Path{};
+    const auto& kingCoordinates = m_King->getAvailableCoordinates();
+    Path escapingPath;
+
+    for (const auto& coordinate : kingCoordinates) { //all are available then..
+        escapingPath.push_back(coordinate);
+    }
+
+    return escapingPath;
 }
 
-GameStateDispatcher::Path GameStateDispatcher::takeRDandLF() const {
-    return Path{};
+bool GameStateDispatcher::isAnySafe(const Path& escapingPath) const {
+    for (const auto& coordinate : escapingPath) {
+        if (isSafe(coordinate)) {
+            return true;
+        }
+    }
+    return false;
 }
 
-GameStateDispatcher::Path GameStateDispatcher::takeRUandLD() const {
-    return Path{};
-}
+bool GameStateDispatcher::isSafe(const Location& coordinate) const {
+    const auto m_board = Board::getInstance();
+    const auto& pieceList = m_board->getPieceList();
+    bool isAvailableForEnemy{false};
 
-GameStateDispatcher::Path GameStateDispatcher::takeRightandLeft() const {
-    return Path{};
-}
+    for (size_t i{0}; i < 8; ++i) {
+        for (const auto& piece : pieceList[i]) {
+            if (isAvailableForEnemy) {
+                return false;
+            }
 
-GameStateDispatcher::Path GameStateDispatcher::takeUpandDown() const {
-    return Path{};
+            if (!piece) {
+                continue;
+            }
+
+            if (piece->getColor() == m_invador->getColor()) {
+                isAvailableForEnemy = SearchInAvailable_Coordinates(*piece, coordinate);
+            }
+        }
+    }
+
+    return true;
 }
