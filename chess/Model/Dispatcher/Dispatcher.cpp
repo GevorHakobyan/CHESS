@@ -20,16 +20,16 @@ bool Dispatcher::isKingAvailable(const Location& KingLocation, const Color enemy
     return false;
 }
 
-bool Dispatcher::SearchInAvailable_Coordinates(const Piece& myPiece, const Location& KingLocation) const {
+bool Dispatcher::SearchInAvailable_Coordinates(const Piece& myPiece, const Location& pieceLocation) {
     if (isPawn(myPiece)) {
-        return handlePawnCase(myPiece, KingLocation);
+        return handlePawnCase(myPiece, pieceLocation);
     }
     
     const AvailableCoordinates& m_Avaialble = myPiece.getAvailableCoordinates();
     for (const auto& coordinate : m_Avaialble) { 
-        if (coordinate == KingLocation) {
-            if (m_Handler->handleRequest(myPiece, KingLocation)) {
-                //get the invading path
+        if (coordinate == pieceLocation) {
+            if (m_Handler->handleRequest(myPiece, pieceLocation)) {
+                m_InvadingPath = m_Handler->getInvadingPath();
                 return true;
             } 
         }
@@ -90,4 +90,8 @@ std::optional<Location> Dispatcher::SearchInRow(const PieceList& pieceList, cons
     }
 
     return std::nullopt;
+}
+
+Dispatcher::InvadingPath Dispatcher::getInvadingPath() {
+    return m_InvadingPath;
 }

@@ -16,7 +16,7 @@ bool GameStateDispatcher::Dispatch(const Piece& invador) {
     return isGameInDeadState();
 } 
 
-bool GameStateDispatcher::isGameInDeadState() const {
+bool GameStateDispatcher::isGameInDeadState(){
     return isKingKilled();
 }
 
@@ -49,10 +49,10 @@ void GameStateDispatcher::setInvador(const Piece& piece) {
     m_invador = &piece;
 }
 
-bool GameStateDispatcher::isKingKilled() const { 
+bool GameStateDispatcher::isKingKilled() { 
     const auto& escapingPath = findEscapingPath(); //from this check only
     bool isSafe = isAnySafe(escapingPath);
-    return false;
+    return isSafe;
 }
 
 GameStateDispatcher::Path GameStateDispatcher::findEscapingPath() const {
@@ -101,7 +101,7 @@ GameStateDispatcher::Path GameStateDispatcher::takePawnSafePlaces() const {
     return escapingPath;
 }
 
-bool GameStateDispatcher::isAnySafe(const Path& escapingPath) const {
+bool GameStateDispatcher::isAnySafe(const Path& escapingPath) {
     for (const auto& coordinate : escapingPath) {
         if (isSafe(coordinate)) {
             return true;
@@ -110,7 +110,7 @@ bool GameStateDispatcher::isAnySafe(const Path& escapingPath) const {
     return false;
 }
 
-bool GameStateDispatcher::isSafe(const Location& coordinate) const {
+bool GameStateDispatcher::isSafe(const Location& coordinate) {
     const auto m_board = Board::getInstance();
     const auto& pieceList = m_board->getPieceList();
     bool isAvailableForEnemy{false};
@@ -130,6 +130,10 @@ bool GameStateDispatcher::isSafe(const Location& coordinate) const {
             }
         }
     }
-
     return true;
 }
+
+void GameStateDispatcher::setInvadingPath(const Path& path) {
+    m_InvadingPath = path;
+}
+

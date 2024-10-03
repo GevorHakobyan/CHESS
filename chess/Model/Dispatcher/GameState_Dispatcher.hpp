@@ -3,12 +3,15 @@
 
 #include "Dispatcher.hpp"
 #include <assert.h>
+#include <unordered_map>
 
 class GameStateDispatcher : public Dispatcher {
     public: //usings
     using thisPtr = std::shared_ptr<GameStateDispatcher>;
     using Path = std::vector<Location>;
     using PiecePtr = const Piece*;
+    using Defenders = std::vector<Piece&>;
+    using DefendersMap = std::unordered_map<Location, Defenders>;
 
     public: //deleted ones
     GameStateDispatcher& operator=(const GameStateDispatcher&) = delete;
@@ -17,6 +20,8 @@ class GameStateDispatcher : public Dispatcher {
     public:
     static thisPtr getInstance();
     bool Dispatch(const Piece&) override;
+    DefendersMap getDefender(); 
+    void setInvadingPath(const Path&);
     ~GameStateDispatcher() = default;
     
     private:
@@ -24,18 +29,19 @@ class GameStateDispatcher : public Dispatcher {
     void setKing(const PiecePtr);
     void setInvador(const Piece&);
     Path findEscapingPath() const;
-    bool isAnySafe(const Path&) const;
+    bool isAnySafe(const Path&);
     Path takePawnSafePlaces() const;
     bool isInvadorPawn() const;
-    bool isGameInDeadState() const;
-    bool isKingKilled() const;
+    bool isGameInDeadState();
+    bool isKingKilled() ;
     bool isAvailableForInvador(const Location&) const;
-    bool isSafe(const Location&) const;
+    bool isSafe(const Location&);
     GameStateDispatcher() = default;
 
     private:
     static thisPtr m_ptr;
     PiecePtr m_King{nullptr};
     PiecePtr m_invador{nullptr};
+    Path m_invadingPath{};
 };
 #endif //GameSTATE_DISPATCHER

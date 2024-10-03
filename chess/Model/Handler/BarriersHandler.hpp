@@ -7,9 +7,11 @@
 
 class Barriers_Handler : public AbstractHandler {
     public:
+    using Path = std::vector<Location>;
     public:
     Barriers_Handler() = default;
     bool handleRequest(const Piece&, const Location&) override;
+    Path getInvadingPath();
     private:
     bool isHorse(const Piece&);
     bool isPawn(const Piece&);
@@ -37,6 +39,10 @@ class Barriers_Handler : public AbstractHandler {
     Location m_currentLocation;
     void setDesiredLocation(const Location&);
     void setCurrentLocation(const Piece&);
+    void addToInvadingPath(const Location&);
+    void eraseInvadingPath();
+    private:
+    Path m_InvadingPath;
 };
 
 #endif

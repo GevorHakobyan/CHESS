@@ -240,5 +240,5 @@ void Model::takeStep(const Location& origin, Index destination) {
 }
 
 bool Model::isGameFinished() const {
-
+    
 }
