@@ -19,8 +19,8 @@ OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 TARGET := $(BIN_DIR)/myprogram
 
 # Compiler and flags
-CXX := g++
-CXXFLAGS := -Wall -Wextra -std=c++17 -g -I$(CONTROLLER_DIR) -I$(MODEL_DIR) -I$(DISPATCHER_DIR) -I$(HANDLER_DIR) -I$(PIECES_DIR) -I$(VIEW_DIR)
+CXX := g++ 
+CXXFLAGS := -Wall -Wextra -std=c++20 -g -I$(CONTROLLER_DIR) -I$(MODEL_DIR) -I$(DISPATCHER_DIR) -I$(HANDLER_DIR) -I$(PIECES_DIR) -I$(VIEW_DIR)
 LDFLAGS := -lncursesw
 
 # Default target

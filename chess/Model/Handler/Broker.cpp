@@ -123,12 +123,10 @@ PieceLocations Broker::getPieceLocations(const Location& destination) {
 }
 
 bool Broker::isMyKingUnderCheck(const Piece& myPiece) {
-    //m_KingDispatcher = MyKingDispatcher::getInstance();
     return m_KingDispatcher->Dispatch(myPiece);
 }
 
 bool Broker::isEnemyKingUnderCheck(const Piece& myPiece) {
-    //m_EnemyKingDispatcher = EnemyKing_Dispatcher::getInstance();
     return m_EnemyKingDispatcher->Dispatch(myPiece);
 }
 
@@ -138,5 +136,39 @@ bool Broker::isKingKilled(const Piece& Invador) {
     if(canEscape) {
         return false;
     }
+
+    const auto defenders = m_GameStateDispatcher->getDefenders();
+    for (const auto& defender : defenders) {
+        if (canDefend(defender)) {
+            return false;
+        }
+    }
+    return true;
 }
 
+bool Broker::canDefend(const std::pair<Location, Location>& defender) {
+    const auto m_board = Board::getInstance();
+    const auto& pieceList = m_board->getPieceList();
+
+    moveDefender(defender.first, defender.second);
+    const auto[newY, newX] = defender.second;
+
+    if(!m_KingDispatcher->Dispatch(*pieceList[newY][newX])) {
+        resetDefender(defender.second, defender.first);
+        return true;
+    }
+    resetDefender(defender.second, defender.first);
+    return false;
+}
+
+void Broker::moveDefender(const Location& currentLocation, const Location& newLocation) {
+    const auto m_board = Board::getInstance();
+    const auto& pieceList = m_board->getPieceList();
+    const auto[currentY, currentX] = currentLocation;
+
+    pieceList[currentY][currentX]->setCurrentLocation(newLocation);
+}
+
+void Broker::resetDefender(const Location& currentLocation, const Location& newLocation) {
+    moveDefender(currentLocation, newLocation);
+}

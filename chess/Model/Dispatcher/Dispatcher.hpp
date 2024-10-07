@@ -12,12 +12,11 @@ class Dispatcher {
     Location determineKingLocation(const wchar_t*);
     virtual bool Dispatch(const Piece&) = 0;
     bool isKingAvailable(const Location&, const Color);
-    bool SearchInAvailable_Coordinates(const Piece&, const Location&) ;
+    bool SearchInAvailable_Coordinates(const Piece&, const Location&);
     InvadingPath getInvadingPath();
     virtual ~Dispatcher() = default;
-    private:
+    protected:
     std::optional<Location> SearchInRow(const PieceList&, const size_t, const wchar_t*);
-    bool handlePawnCase(const Piece&, const Location&)const ;
     bool isPawn(const Piece&) const;
     bool isOnSameColum(const Location&, const Location&) const;
     protected:

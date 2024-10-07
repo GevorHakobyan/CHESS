@@ -20,7 +20,7 @@ bool GameStateDispatcher::isGameInDeadState(){
     return isKingKilled();
 }
 
-const GameStateDispatcher::PiecePtr GameStateDispatcher::findKing(const Piece& invador) {
+const GameStateDispatcher::PiecePtr GameStateDispatcher::findKing(const Piece& invador) const {
     const auto boardPtr = Board::getInstance();
     const auto& pieceList = boardPtr->getPieceList();
     const wchar_t* kingCharacter = (invador.getColor() == Color::White) ? L"\u2654" : L"\u265A";
@@ -134,6 +134,62 @@ bool GameStateDispatcher::isSafe(const Location& coordinate) {
 }
 
 void GameStateDispatcher::setInvadingPath(const Path& path) {
-    m_InvadingPath = path;
+    m_invadingPath = path;
 }
 
+GameStateDispatcher::DefenderMap GameStateDispatcher::getDefenders() {
+    const auto m_board = Board::getInstance();
+    const auto& pieceList = m_board->getPieceList();
+    DefenderMap map;
+    int size{0};
+
+    
+    for (size_t i{0}; i < 8; ++i) {
+        for (const auto& piece : pieceList[i]) {
+            if (nullptr == piece || *piece == *m_King) {
+                continue;
+            }
+
+            if(piece->getColor() == m_King->getColor()) {
+                const auto[can, coordinate] = canDefend(*piece);
+                if (can) {
+                    ++size;
+                    map[piece->getCurrentLocation()] = coordinate;
+                }
+            }
+        }
+    }
+
+    int size2 = size;
+    return map;
+}
+
+std::pair<bool, Location> GameStateDispatcher::canDefend(const Piece& piece) {
+    if (isPawn(piece)) {
+        return HandlePawnCase(piece);
+    }
+
+    for (const auto& coordinate : m_invadingPath) {
+        if (SearchInAvailable_Coordinates(piece, coordinate)) {
+            return {true, coordinate};
+        }
+    }
+
+    Location defaultLocation;
+    return {false, defaultLocation};
+}
+
+std::pair<bool, Location> GameStateDispatcher::HandlePawnCase(const Piece& defender) {
+    const auto invadorLocation = m_invadingPath[0];
+    if (isOnSameColum(defender.getCurrentLocation(), invadorLocation)) {
+        return {false, invadorLocation};
+    }
+
+    const auto& availableCoordinates = defender.getAvailableCoordinates();
+    const auto itr = std::ranges::find(availableCoordinates, invadorLocation);
+
+    if (availableCoordinates.end() == itr) {
+        return {false, invadorLocation};
+    }
+    return {true, invadorLocation};
+}

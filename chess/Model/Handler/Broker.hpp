@@ -30,6 +30,9 @@ class Broker {
     private:
     static bool isOnSameColum(const Piece&, const Location&);
     static bool isPawn(const Piece&);
+    static bool canDefend(const std::pair<Location, Location>&);
+    static void moveDefender(const Location&, const Location&);
+    static void resetDefender(const Location&, const Location&);
     private:
     static MyKingDispatcherPtr m_KingDispatcher;
     static EnemyKingDispatcherPtr m_EnemyKingDispatcher;

@@ -20,9 +20,11 @@ bool Dispatcher::isKingAvailable(const Location& KingLocation, const Color enemy
     return false;
 }
 
-bool Dispatcher::SearchInAvailable_Coordinates(const Piece& myPiece, const Location& pieceLocation) {
+bool Dispatcher::SearchInAvailable_Coordinates(const Piece& myPiece, const Location& pieceLocation){
     if (isPawn(myPiece)) {
-        return handlePawnCase(myPiece, pieceLocation);
+        if (isOnSameColum(myPiece.getCurrentLocation(), pieceLocation)) {
+            return false;
+        }
     }
     
     const AvailableCoordinates& m_Avaialble = myPiece.getAvailableCoordinates();
@@ -58,20 +60,6 @@ bool Dispatcher::isPawn(const Piece& myPiece) const {
     return (*character ==  *blackPawn || *character ==  *whitePawn) ? true : false;
 }
 
-    
-
-bool Dispatcher::handlePawnCase(const Piece& myPiece, const Location& KingLocation) const {
-    const AvailableCoordinates& availableCoordinates = myPiece.getAvailableCoordinates();
-
-    for (const auto& coordinate : availableCoordinates) {
-        if (coordinate == KingLocation && !isOnSameColum(coordinate, KingLocation)) {
-            if (m_Handler->handleRequest(myPiece, KingLocation) ) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
 
 bool Dispatcher::isOnSameColum(const Location& myLocation, const Location& KingLocation) const {
     return myLocation.second == KingLocation.second;
