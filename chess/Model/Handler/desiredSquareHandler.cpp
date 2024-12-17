@@ -2,9 +2,6 @@
 
 bool DesiredSquare_Handler::handleRequest(const Piece& myPiece, const Location& desiredLocation) {
     const auto[isPawn, answer] = HandleIfPawn(myPiece, desiredLocation);
-    if (desiredLocation.first == 0 && desiredLocation.second == 4) {
-        a = 72;
-    }
     if (isPawn) {
         return (answer) ? AbstractHandler::handleRequest(myPiece, desiredLocation) : false;
     }
@@ -22,7 +19,6 @@ bool DesiredSquare_Handler::handleRequest(const Piece& myPiece, const Location& 
 std::pair<bool, bool> DesiredSquare_Handler::HandleIfPawn(const Piece& myPiece, const Location& desiredLocation) {
     const auto[isPawn, isEvent, isOnSameColum] = Broker::HandleIfPawn(myPiece, desiredLocation);
     std::pair<bool, bool> answer;
-
 
     if (!isPawn) {
         answer.first = false;

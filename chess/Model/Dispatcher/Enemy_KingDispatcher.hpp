@@ -6,7 +6,7 @@
 
 class EnemyKing_Dispatcher : public Dispatcher{
     public:
-    using thisPtr = std::shared_ptr<EnemyKing_Dispatcher>;
+    using thisPtr = std::shared_ptr<EnemyKing_Dispatcher>;// Enemy_kingDispatcher*
     public: //deleted ones
     EnemyKing_Dispatcher& operator=(const EnemyKing_Dispatcher&) = delete;
     EnemyKing_Dispatcher(const EnemyKing_Dispatcher&) = delete;
