@@ -1,7 +1,6 @@
 #ifndef ABSTRACT_HANDLER_HPP
 #define ABSTRACT_HANDLER_HPP
 
-//#include "Handler.hpp"
 #include <memory>
 #include "Piece.hpp"
 

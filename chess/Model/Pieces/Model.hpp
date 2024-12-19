@@ -21,12 +21,7 @@ class Model {
     Model& operator=(const Model&) = delete;
     Model(const Model&) = delete;
     bool Move(UserInput);
-    void setMap(Map&);
     const PieceList& getPieceList() const;
-    const wchar_t* getMovedPiece_Character();
-    const wchar_t* getSquare_Character();
-    void setMovedPiece_Character(const Location&);
-    void setMovedSquare_Character(const Location&);
     bool isEven(const int);
     bool isOdd(const int);
     bool getSquareColor(const Location&);
@@ -49,20 +44,16 @@ class Model {
     void UndoBoardUpdate(Index&, Index&);
     void UpdatePiece_Data(Location&);
     void UndoPieceData_Update(Location&);
-    void updateMap(Location&, Index&);
     void UndoStep(UserInput);
     bool isStepValid(const UserInput&);
-    void takeStep(const Location&, Index);
+    void takeStep(Location, Index);
   
 
     private:
     static Model* m_Model;
     Model();
     Board* m_Board{nullptr};
-    Map m_pieceMap{nullptr};
     const PieceList& m_pieceList;
-    wchar_t* m_Piece;
-    wchar_t* m_Square;
     HandlerPtr<PieceExistanceHandler> m_ExistanceHandler{nullptr};
     HandlerPtr<QueHandler> m_QueHandler{nullptr};
     HandlerPtr<AvailableCoordinates_Handler> m_AvailableHandler{nullptr};

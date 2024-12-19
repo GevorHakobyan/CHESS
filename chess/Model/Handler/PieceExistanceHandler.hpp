@@ -2,7 +2,6 @@
 #define PIECEEXISTEANCE_HANDLER_HPP
 
 #include "AbstractHandler.hpp"
-#include <ncurses.h>
 
 class PieceExistanceHandler : public AbstractHandler{
     public:

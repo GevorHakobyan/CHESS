@@ -3,7 +3,6 @@
 
 
 #include "AbstractHandler.hpp"
-#include <ncurses.h>
 
 class AvailableCoordinates_Handler : public AbstractHandler {
     public:

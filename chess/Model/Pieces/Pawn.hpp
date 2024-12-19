@@ -2,7 +2,6 @@
 #define PAWN_HPP
 
 #include "Piece.hpp"
-//#include "Model.hpp"
 #include "Board.hpp"
 #include <optional>
 

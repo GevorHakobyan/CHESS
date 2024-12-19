@@ -1,0 +1,91 @@
+# Set the minimum required version of CMake
+cmake_minimum_required(VERSION 3.16)
+
+# Set the project name and version
+project(ChessBoardApp VERSION 1.0)
+
+# Find Qt5 (Widgets, Gui, Core)
+find_package(Qt5 REQUIRED COMPONENTS Widgets Gui Core)
+
+# Set C++20 as the required standard
+set(CMAKE_CXX_STANDARD 20)
+
+# Add all source files to the project
+set(SOURCES
+    Controller/main.cpp
+    Controller/Controller.cpp
+    View/Board.cpp
+    View/MainWindow.cpp
+    Model/Dispatcher/Dispatcher.cpp
+    Model/Dispatcher/Enemy_KingDispatcher.cpp
+    Model/Dispatcher/GameState_Dispatcher.cpp
+    Model/Dispatcher/MyKingDispatcher.cpp
+    Model/Handler/AbstractHandler.cpp
+    Model/Handler/BarriersHandler.cpp
+    Model/Handler/Board.cpp
+    Model/Handler/desiredSquareHandler.cpp
+    Model/Handler/PIeceExistanceHandler.cpp
+    Model/Handler/QueHandler.cpp
+    Model/Pieces/Bishop.cpp
+    Model/Pieces/King.cpp
+    Model/Pieces/Knight.cpp
+    Model/Pieces/Pawn.cpp
+    Model/Pieces/Queen.cpp
+    Model/Pieces/Rook.cpp
+    Model/Pieces/Model.cpp
+)
+
+# Add all header files to the project
+set(HEADERS
+    Controller/Controller.hpp
+    View/Board.h
+    View/MainWindow.h
+    Model/Dispatcher/Dispatcher.hpp
+    Model/Dispatcher/Enemy_KingDispatcher.hpp
+    Model/Dispatcher/GameState_Dispatcher.hpp
+    Model/Dispatcher/MyKingDispatcher.hpp
+    Model/Handler/AbstractHandler.hpp
+    Model/Handler/BarriersHandler.hpp
+    Model/Handler/Board.hpp
+    Model/Handler/Broker.hpp
+    Model/Handler/Handler.hpp
+    Model/Handler/PIeceExistanceHandler.hpp
+    Model/Handler/QueHandler.hpp
+    Model/Handler/desiredSquareHandler.hpp
+    Model/Pieces/Bishop.hpp
+    Model/Pieces/King.hpp
+    Model/Pieces/Knight.hpp
+    Model/Pieces/Pawn.hpp
+    Model/Pieces/Queen.hpp
+    Model/Pieces/Rook.hpp
+    Model/Pieces/Model.hpp
+)
+
+# Include directories
+include_directories(
+    ${CMAKE_SOURCE_DIR}/Controller
+    ${CMAKE_SOURCE_DIR}/View
+    ${CMAKE_SOURCE_DIR}/Model
+    ${CMAKE_SOURCE_DIR}/Model/Dispatcher
+    ${CMAKE_SOURCE_DIR}/Model/Handler
+    ${CMAKE_SOURCE_DIR}/Model/Pieces
+)
+
+# Create the executable
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+
+# Link the necessary Qt libraries
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets Qt5::Gui Qt5::Core)
+
+# Enable automatic MOC (Meta-Object Compiler) processing for Qt files
+set(CMAKE_AUTOMOC ON)
+
+# Enable automatic UIC (User Interface Compiler) processing for Qt files
+set(CMAKE_AUTOUIC ON)
+
+# Enable automatic RCC (Resource Compiler) processing for Qt resources
+set(CMAKE_AUTORCC ON)
+
+# Set the output directory for the executable
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+

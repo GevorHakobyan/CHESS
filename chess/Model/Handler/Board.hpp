@@ -7,8 +7,8 @@
 #include "King.hpp"
 #include "Pawn.hpp"
 #include "Queen.hpp"
+#include <array>
 #include "Rook.hpp"
-#include <ncurses.h>
 #include <map>
 #include <vector>
 
