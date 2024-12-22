@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+#include "GameWindow.h"
 
 MainWindow::MainWindow() {
     m_Board = new ChessBoard();

@@ -5,8 +5,10 @@ Controller::Controller()
 
 void Controller::Play() {
 
+    bool step{false};
     while(true) {
-        bool step{false}; 
+        std::cout << "In controller\n";
+        qDebug() << "conroller via debug()\n";
         m_UserInput = m_GameWindow.show(step);
         step = m_Model->Move(m_UserInput);
     }

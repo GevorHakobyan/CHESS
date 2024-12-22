@@ -2,7 +2,7 @@
 #define CHESS_CONTROLLER_HPP
 
 #include "Model.hpp"
-#include "MainWindow.h"
+#include "GameWindow.h"
 
 class Controller {
     public:

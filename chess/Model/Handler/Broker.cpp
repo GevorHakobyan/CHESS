@@ -151,9 +151,9 @@ bool Broker::canDefend(const std::pair<Location, Location>& defender) {
     const auto& pieceList = m_board->getPieceList();
 
     moveDefender(defender.first, defender.second);
-    const auto[newY, newX] = defender.second;
+    const auto[newX, newY] = defender.second;
 
-    if(!m_KingDispatcher->Dispatch(*pieceList[newY][newX])) {
+    if(!m_KingDispatcher->Dispatch(*pieceList[newX][newY])) {
         resetDefender(defender.second, defender.first);
         return true;
     }
@@ -164,9 +164,9 @@ bool Broker::canDefend(const std::pair<Location, Location>& defender) {
 void Broker::moveDefender(const Location& currentLocation, const Location& newLocation) {
     const auto m_board = Board::getInstance();
     const auto& pieceList = m_board->getPieceList();
-    const auto[currentY, currentX] = currentLocation;
+    const auto[currentX, currentY] = currentLocation;
 
-    pieceList[currentY][currentX]->setCurrentLocation(newLocation);
+    pieceList[currentX][currentY]->setCurrentLocation(newLocation);
 }
 
 void Broker::resetDefender(const Location& currentLocation, const Location& newLocation) {

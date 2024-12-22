@@ -1,4 +1,4 @@
-#include "Board.h"
+#include "ViewBoard.h"
 
 ChessBoard::ChessBoard() {
     setMap();

@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QEventLoop>
-#include "Board.h"  
+#include "ViewBoard.h"  
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
