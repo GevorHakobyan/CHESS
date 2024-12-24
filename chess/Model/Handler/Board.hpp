@@ -19,6 +19,7 @@ enum class PieceTypes{Rook, Queen, Knight};
 
 class Board {
     public:
+    using Color = Piece::Color;
     static Board* getInstance();
     Board(Board&) =  delete;
     Board& operator=(const Board&) = delete;
@@ -27,8 +28,8 @@ class Board {
     void updateMatrix(Index&, Index&);
     void updatePieceData(Location&);
     //SPECIAL CASE
-    void swapPawnWith(const Index&, std::pair<const wchar_t*, Color>&, const Index&);
-    PieceTypes determineCharacter(std::pair<const wchar_t*, Color>);
+    void swapPawnWith(const Index&, wchar_t*, const Index&);
+    PieceTypes determineCharacter(const wchar_t*);
 
     private: 
     ~Board();

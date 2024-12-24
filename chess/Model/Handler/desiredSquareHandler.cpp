@@ -29,8 +29,8 @@ std::pair<bool, bool> DesiredSquare_Handler::HandleIfPawn(const Piece& myPiece, 
 
     if (isPawn && isEvent) {
         AbstractHandler::handleRequest(myPiece, desiredLocation);
-        answer.second = false;
-        return {true, false};
+        answer.second = false; //initially false
+        return answer;
     }
 
     if (isPawn && isOnSameColum) {

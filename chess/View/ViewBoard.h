@@ -11,6 +11,8 @@
 class ChessBoard : public QWidget {
     Q_OBJECT
     public:
+    enum class States{Normal, PawnEvent};
+    enum PawnColor{White, Black, Undefined};
     using Location = std::pair<size_t, size_t>;
     using Index = std::pair<size_t, size_t>;
     using PieceIndexes = std::pair<Index, Index>;
@@ -21,11 +23,15 @@ class ChessBoard : public QWidget {
     explicit ChessBoard();
     ~ChessBoard() override = default;
     PieceIndexes getIndexes() const;
-    void ChnageBoardState();
+    void ChangeBoardState(PawnColor);
+    void ChangeBoardContent();
+    PieceCharacter getPromotedCharacter();
     signals:
     void userInputCaptured();
     
     private:
+    PieceCharacter getUserChoice(QMouseEvent*) const;
+    void printChoices();
     void setSquareColor(QPainter&, size_t, size_t) const;
     void printRow(QPainter&, size_t);
     void printSquares(QPainter&) ;
@@ -34,11 +40,14 @@ class ChessBoard : public QWidget {
     void mousePressEvent(QMouseEvent *event) override;
     void setMap();
     private:
+    States m_State{States::Normal};
+    PawnColor m_pawnColor{PawnColor::Undefined};
+    PieceCharacter m_PromotedCharacter{L"\u265F"};
     Map m_BoardState{};
     bool m_Que{false};
     PieceIndexes m_PieceIndexes;
     UserInput m_userInput;
-    int m_squareSize{120};
+    int m_squareSize{120};   
 };
 
 #endif // BOARD_H

@@ -9,10 +9,10 @@
 using Location = std::pair<int, int>;
 using AvailableCoordinates = std::vector<Location>;
 
-enum class Color{Black, White, Unknown};
 
 class Piece {
     public:
+    enum class Color{Black, White, Unknown};
     Piece() = default;
     Piece(const std::string&, const wchar_t*, Location);
     virtual ~Piece();

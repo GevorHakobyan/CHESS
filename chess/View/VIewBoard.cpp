@@ -9,9 +9,23 @@ void ChessBoard::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
     printSquares(painter);
     printCharacters(painter);
+    if (m_State == States::PawnEvent) {
+        printChoices();
+
+    }
 }
 
 void ChessBoard::mousePressEvent(QMouseEvent* event) {
+    if (m_State == States::PawnEvent) {
+        PieceCharacter INVALID =  L"\u265F";   
+        while (m_PromotedCharacter == INVALID) {
+            m_PromotedCharacter = getUserChoice(event);
+        }
+        ChangeBoardContent();
+        emit userInputCaptured();
+        return;
+    }
+
     m_Que = !m_Que;
     int x = event->x();
     int y = event->y();
@@ -73,7 +87,7 @@ ChessBoard::PieceIndexes ChessBoard::getIndexes() const {
     return m_PieceIndexes;
 }
 
-void ChessBoard::ChnageBoardState() {
+void ChessBoard::ChangeBoardContent() {
     auto targetIter = m_BoardState.find(m_userInput.second);
     if (targetIter != m_BoardState.end()) {
         m_BoardState.erase((*targetIter).first);
@@ -81,8 +95,18 @@ void ChessBoard::ChnageBoardState() {
 
     auto [location, character] = *m_BoardState.find(m_userInput.first);
     m_BoardState.erase(location);
-    qDebug() << m_userInput.second << "\n";
-    m_BoardState.insert({m_userInput.second, character});
+    PieceCharacter INVALID = L"\u265F";   
+    if (m_PromotedCharacter == INVALID) {
+        m_BoardState.insert({m_userInput.second, character});
+        return;
+    }
+
+    m_BoardState.insert({m_userInput.second, m_PromotedCharacter});
+}
+
+void ChessBoard::ChangeBoardState(PawnColor pawnColor) {
+    m_State = States::PawnEvent;
+    m_pawnColor = pawnColor;
 }
 
 void ChessBoard::setMap() {
@@ -173,4 +197,60 @@ void ChessBoard::setMap() {
     x = i++ * m_squareSize + 150;
 }
 
+void ChessBoard::printChoices() {
+    QString Queen = (m_pawnColor == PawnColor::Black) ? "\u2655" : "\u265B";
+    QString Horse = (m_pawnColor == PawnColor::Black) ? "\u2658": "\u265E";
+    QString Bishop = (m_pawnColor == PawnColor::Black) ? "\u2657" : "\u265D";
 
+    QPainter painter(this);
+    QFont font("Alpha", 48, QFont::Bold);  
+    painter.setFont(font);
+    painter.setPen(Qt::black);
+    painter.setBrush(Qt::green);
+    painter.drawRect(1200, 430, 120, 120);
+    painter.drawRect(1320, 430, 120, 120);
+    painter.drawRect(1440, 430, 120, 120);
+
+    size_t x = 1225;
+    size_t y = 500;
+    painter.drawText(x, y, Queen);
+
+    x += 120;
+    painter.drawText(x, y, Horse);
+
+    x += 120;
+    painter.drawText(x, y, Bishop);
+}
+
+ChessBoard::PieceCharacter ChessBoard::getUserChoice(QMouseEvent* event) const {
+    int x = event->x();
+    int y = event->y();
+    PieceCharacter INVALID =  L"\u265F";    
+    PieceCharacter Queen = (m_pawnColor == PawnColor::White) ? L"\u2655" : L"\u265B";
+    PieceCharacter Horse = (m_pawnColor == PawnColor::White) ? L"\u2658": L"\u265E";
+    PieceCharacter Bishop = (m_pawnColor == PawnColor::White) ? L"\u2657" : L"\u265D";
+    if (y < 430 || y > 550) {
+        return INVALID;
+    }
+
+    if (x > 100 && x < 1320) {
+        return Queen;
+    }
+
+    if (x > 1320 && x < 1440) {
+        return Horse;
+    }
+
+    if (x > 1440 && x < 1560) {
+        return Bishop;
+    }
+
+    return INVALID;
+}
+
+ChessBoard::PieceCharacter ChessBoard::getPromotedCharacter() {
+    PieceCharacter answer = m_PromotedCharacter;
+    m_PromotedCharacter = L"\u265F"; //restate to INVALID 
+    m_State = States::Normal;
+    return answer;
+}

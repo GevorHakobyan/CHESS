@@ -1,13 +1,14 @@
 #ifndef CHESS_MODEL_HPP
 #define CHESS_MODEL_HPP
 
-
 #include "PieceExistanceHandler.hpp"
 #include "AvailableCoordinatesHandler.hpp"
 #include "BarriersHandler.hpp"
 #include "desiredSquareHandler.hpp"
 #include "QueHandler.hpp"
-#include "Board.hpp"
+#include "Broker.hpp"
+#include <QDebug>
+#include <iostream>
 
 using Map = std::unique_ptr<std::map<Location, Index>>;
 using UserInput = std::pair<Location, Location>;
@@ -17,29 +18,21 @@ using HandlerPtr = std::shared_ptr<T>;
 
 class Model {
     public:
+    using PieceCharacter = wchar_t*;
+    using Color = Piece::Color;
     static Model* getInstance();
     Model& operator=(const Model&) = delete;
     Model(const Model&) = delete;
     bool Move(UserInput);
     const PieceList& getPieceList() const;
-    bool isEven(const int);
-    bool isOdd(const int);
-    bool getSquareColor(const Location&);
-    Color getPieceColor(const Index&); 
     //Event 
     void DeactivateEvent();
     bool isEventActive() const;
-    const PieceOptions& getPieceOptions() const;
-    const PieceLocations& getPieceLocations() const;
-    void ImplementUserChoice(const Location&, const UserInput&);
-    void setUserChoice_Character(const Location&);  
     bool isGameFinished() const; 
 
     private:
-    void setEventInfo(const Color&, const Location&);
+    void isEvent(UserInput);
     void ActivateEventState();
-    bool areSquaresValid(const Location&, const Location&);
-    bool isOriginNullable(const Location&) const;
     void updateBoardMatrix(Index&, Index&);
     void UndoBoardUpdate(Index&, Index&);
     void UpdatePiece_Data(Location&);
@@ -53,6 +46,7 @@ class Model {
     static Model* m_Model;
     Model();
     Board* m_Board{nullptr};
+    wchar_t* m_Piece{nullptr};
     const PieceList& m_pieceList;
     HandlerPtr<PieceExistanceHandler> m_ExistanceHandler{nullptr};
     HandlerPtr<QueHandler> m_QueHandler{nullptr};
@@ -60,8 +54,12 @@ class Model {
     HandlerPtr<Barriers_Handler> m_BarriersHandler{nullptr};
     HandlerPtr<DesiredSquare_Handler> m_DesiredHandler{nullptr};
     //Event
-    PieceOptions m_PieceOptions;
-    std::vector<Location> m_PieceLocations;
+    public:
+    void ImplementEvent(UserInput, PieceCharacter);
+    Color getPawnColor() const;
+    private:
+    void setPawnColor(Color);
+    Color m_pawnColor{};
     bool m_EventState{false};
 };
 #endif //CHESS_MODEL_HPP

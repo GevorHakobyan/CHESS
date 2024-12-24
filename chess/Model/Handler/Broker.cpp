@@ -76,51 +76,6 @@ bool Broker::isPawnEventTime(const Piece& myPiece, const Location& myLocation) {
     return  (myLocation.first == BoardMax || myLocation.first == BoardMin) ? true : false;
 }
 
-void Broker::CreatePawnEvent(const Location& desiredCoordinates, const Location& desiredLocation, const Color pieceColor) {
-    if (!isEmpty(desiredLocation)) {
-        return;
-    }
-    PieceOptions m_Options = getPieceOptions(pieceColor);
-}
-
-PieceOptions Broker::getPieceOptions(const Color& PiecesColors) {
-    PieceOptions options;
-    if (PiecesColors == Color::Black) {
-        const wchar_t* Rook{L"\u2656"};
-        const wchar_t* Queen{L"\u2655"};
-        const wchar_t* Knight{ L"\u2658"};
-        options.push_back(Rook);
-        options.push_back(Queen);
-        options.push_back(Knight);
-        return options;
-    }
-    const wchar_t* Rook{L"\u265C"};
-    const wchar_t* Queen{L"\u265B"};
-    const wchar_t* Knight{ L"\u265E"};
-    options.push_back(Rook);
-    options.push_back(Queen);
-    options.push_back(Knight);
-    return options;
-}
-
-PieceLocations Broker::getPieceLocations(const Location& destination) {
-    int verticalStep = (destination.first < 42) ? -5 : 5; 
-    int horizontalStep{9};
-    PieceLocations locations;
-    Location tmpLocation;
-
-    tmpLocation.first = (destination.first + verticalStep);
-    tmpLocation.second = (destination.second - horizontalStep);
-    locations.push_back(tmpLocation);
-
-    tmpLocation.second = (destination.second);
-    locations.push_back(tmpLocation);
-
-    tmpLocation.second = (destination.second + horizontalStep);
-    locations.push_back(tmpLocation);
-
-    return locations;
-}
 
 bool Broker::isMyKingUnderCheck(const Piece& myPiece) {
     return m_KingDispatcher->Dispatch(myPiece);

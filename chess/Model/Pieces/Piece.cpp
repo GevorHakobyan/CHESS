@@ -52,7 +52,7 @@ void Piece::setColor(const std::string& color) {
     color == "Black"? m_color = Color::Black : m_color = Color::White;
 } 
 
-Color Piece::getColor() const {
+Piece::Color Piece::getColor() const {
     return m_color;
 }
 

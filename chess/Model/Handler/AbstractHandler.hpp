@@ -6,6 +6,7 @@
 
 class AbstractHandler {
     public:
+    using Color = Piece::Color;
     using HandlerPtr = std::shared_ptr<AbstractHandler>;
     AbstractHandler() = default;
     HandlerPtr setNextHandler(HandlerPtr);

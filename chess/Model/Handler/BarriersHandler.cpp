@@ -87,8 +87,8 @@ bool Barriers_Handler::handlePrependicular() {
 
 bool Barriers_Handler::goUp() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startX, startY] = m_currentLocation;
-    auto [desiredX, desiredY] = m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Location desiredLocation = m_desiredLocation;
 
      for (int i{startY + 1}; i < desiredY; ++i) {
@@ -105,8 +105,8 @@ bool Barriers_Handler::goUp() {
 
 bool Barriers_Handler::goDown() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startX, startY] = m_currentLocation;
-    auto [desiredX, desiredY] = m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Location desiredLocation = m_desiredLocation;
 
      for (int i{startY - 1}; i > desiredY; --i) {
@@ -122,8 +122,8 @@ bool Barriers_Handler::goDown() {
 
 bool Barriers_Handler::goRight() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startX, startY] = m_currentLocation;
-    auto [desiredX, desiredY] = m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Location desiredLocation = m_desiredLocation;
 
      for (int i{startX + 1}; i < desiredX; ++i) {
@@ -139,8 +139,8 @@ bool Barriers_Handler::goRight() {
 
 bool Barriers_Handler::goLeft() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startX, startY] = m_currentLocation;
-    auto [desiredX, desiredY] = m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Location desiredLocation = m_desiredLocation;
 
      for (int i{startX - 1}; i > desiredX; --i) {
@@ -156,8 +156,8 @@ bool Barriers_Handler::goLeft() {
 
 bool Barriers_Handler::goRightDown() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startX, startY] = m_currentLocation;
-    auto [desiredX, desiredY] = m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Location desiredLocation = m_desiredLocation;
 
     for (int i{startX + 1}; i < desiredX; ++i) {
@@ -174,8 +174,8 @@ bool Barriers_Handler::goRightDown() {
 
 bool Barriers_Handler::goRightUp() { 
     Board* myBoard{Board::getInstance()}; 
-    auto [startX, startY] = m_currentLocation;
-    auto [desiredX, desiredY] = m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Location desiredLocation = m_desiredLocation;
 
     for (int i{startX + 1}; i < desiredX; ++i) {
@@ -193,8 +193,8 @@ bool Barriers_Handler::goRightUp() {
 
 bool Barriers_Handler::goLeftUp() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startX, startY] = m_currentLocation;
-    auto [desiredX, desiredY] = m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Location discovarableLocation = m_desiredLocation;
 
     for (int i{startX - 1}; i > desiredX; --i) {
@@ -212,8 +212,8 @@ bool Barriers_Handler::goLeftUp() {
 
 bool Barriers_Handler::goLeftDown() {
     Board* myBoard{Board::getInstance()}; 
-    auto [startX, startY] = m_currentLocation;
-    auto [desiredX, desiredY] = m_desiredLocation;
+    auto [startY, startX] = m_currentLocation;
+    auto [desiredY, desiredX] = m_desiredLocation;
     Location discovarableLocation = m_desiredLocation;
 
     for (int i{startX - 1}; i > desiredX; --i) {

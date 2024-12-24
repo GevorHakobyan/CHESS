@@ -15,15 +15,13 @@ class Broker {
     using MyKingDispatcherPtr = std::shared_ptr<MyKingDispatcher>;
     using EnemyKingDispatcherPtr = std::shared_ptr<EnemyKing_Dispatcher>;
     using GameStatePtr = std::shared_ptr<GameStateDispatcher>;
+    using Color = Piece::Color;
     public: //methods
     Broker() = default;
     static Answer HandleIfPawn(const Piece&, const Location&);
     static bool isEmpty(const Location&);
     static bool isEnemy(const Location&, const Color&);
     static bool isPawnEventTime(const Piece&, const Location&);
-    static void CreatePawnEvent(const Location&, const Location&, const Color);
-    static PieceOptions getPieceOptions(const Color&);
-    static PieceLocations getPieceLocations(const Location&);
     static bool isMyKingUnderCheck(const Piece&);
     static bool isEnemyKingUnderCheck(const Piece&);
     static bool isKingKilled(const Piece&);

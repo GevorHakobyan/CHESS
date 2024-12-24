@@ -6,6 +6,7 @@
 
 class Dispatcher {
     public:
+    using Color = Piece::Color;
     using HandlerPtr = std::unique_ptr<Barriers_Handler>;
     using InvadingPath = std::vector<Location>;
     Dispatcher();

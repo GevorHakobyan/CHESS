@@ -1,5 +1,6 @@
 #include "Model.hpp"
 
+
 Model* Model::m_Model = nullptr;
 
 Model::Model()
@@ -28,16 +29,10 @@ Model* Model::getInstance() {
 
 bool Model::Move(UserInput userInput) {
     auto[origin, destination] = userInput;
-    if (areSquaresValid(origin, destination)) {
+    if (origin == destination) {
         return false;
     }
-
-    const auto[y, x] = origin;
-    if (isOriginNullable(origin)) {
-        return false;
-    }
-
-    Color pieceColor = m_pieceList[y][x].get()->getColor(); 
+    auto[y, x] = origin;
      
     if (isStepValid(userInput)) {
         takeStep(origin, destination);
@@ -52,30 +47,13 @@ bool Model::Move(UserInput userInput) {
             if (Broker::isKingKilled(*m_pieceList[Ynew][Xnew])) {
             }
         }
-        return true;
-    }
 
-    if(Broker::isPawnEventTime(*m_pieceList[y][x], destination)) {
-        ActivateEventState();
-        setEventInfo(m_pieceList[y][x]->getColor(), userInput.second);
-    }
+        return true;
+    }    
+    isEvent(userInput);
     return false; 
 }
 
-bool Model::areSquaresValid(const Location& origin, const Location& destination) {
-   if(0 == origin.first || 0 == origin.second) {
-    return true;
-   };
-   return  (0 == destination.first || 0 == destination.second) ? true : false;
-}
-
-bool Model::isOriginNullable(const Location& origin) const {
-    const auto[y, x] = origin;
-    if (!m_pieceList[y][x].get()) {
-        return true;
-    }
-    return false;
-}
 
 void Model::updateBoardMatrix(Index& previousIndex, Index& newIndex) {
      m_Board->updateMatrix(previousIndex, newIndex);
@@ -93,55 +71,11 @@ void Model::UndoPieceData_Update(Location& previousLocation) {
     m_Board->updatePieceData(previousLocation);
 }
 
+
 const PieceList& Model::getPieceList() const {
     return m_pieceList;
 }
 
-bool Model::isEven(int index) {
-    return (0 == index % 2) ? true : false;
-}
-
-bool Model::isOdd(int index) {
-    return (0 != index % 2) ? true : false;
-}
-
-// (true == black) (false == white)
- bool Model::getSquareColor(const Location& origin) {
-   const auto[i, j] = origin;
-
-   if((isEven(i) && isEven(j))) {
-    return false;
-   }
-
-   if((isOdd(i) && isOdd(j))) {
-    return false;
-   }
-   return true;
-}
-
-
-Color Model::getPieceColor(const Index& myPieceIndex) {
-    const auto[i , j] = myPieceIndex;
-
-    if (m_pieceList[i][j] == nullptr) {
-        return Color::Unknown;
-    }
-
-    return m_pieceList[i][j].get()->getColor();
-}
-
-void Model::setEventInfo(const Color& pawnColor, const Location& destination) {
-    m_PieceOptions = Broker::getPieceOptions(pawnColor);
-    m_PieceLocations = Broker::getPieceLocations(destination);
-}
-
-const PieceOptions& Model::getPieceOptions() const {
-    return m_PieceOptions;
-}
-
-const PieceLocations& Model::getPieceLocations() const {
-    return m_PieceLocations;
-}
 
 void Model::ActivateEventState() {
     m_EventState = true;
@@ -152,34 +86,7 @@ void Model::DeactivateEvent() {
 }
 
 bool Model::isEventActive() const {
-    return (m_EventState == true) ? true : false;
-}
-
-void Model::ImplementUserChoice(const Location& userChoice, const UserInput& m_userInput) {
-    /*const auto[origin, destination] = m_userInput;
-    setUserChoice_Character(userChoice);
-
-    Location Origin = (*m_pieceMap)[m_userInput.first];
-    Location Destination = (*m_pieceMap)[m_userInput.second];
-    m_Board->swapPawnWith(Origin, character, Destination);
-    const auto[y, x] = Destination;*/
-}
-
-void Model::setUserChoice_Character(const Location& userChoice) {
-    int Rook = m_PieceLocations[0].second;
-    const int Queen = m_PieceLocations[1].second;
-    const int Knight = m_PieceLocations[2].second;
-
-    /*if (userChoice.second == Rook) {
-        m_Piece = const_cast<wchar_t*>(m_PieceOptions[0]);
-        return;
-    }
-
-    if (userChoice.second == Queen) {
-        m_Piece = const_cast<wchar_t*>(m_PieceOptions[1]);
-        return;
-    }
-    m_Piece = const_cast<wchar_t*>(m_PieceOptions[2]);*/
+    return m_EventState;
 }
 
 void Model::UndoStep(UserInput userInput) {
@@ -190,10 +97,23 @@ void Model::UndoStep(UserInput userInput) {
     m_QueHandler->m_que = (m_QueHandler->m_que) ? false : true;
 }
 
+void Model::isEvent(UserInput indexes) {
+    auto [origin, destination] = indexes;
+    auto [y, x] = origin;
+    if (&(*m_pieceList[y][x]) == nullptr) {
+        return;
+    }
+
+    if(Broker::isPawnEventTime(*m_pieceList[y][x], destination)) {
+        ActivateEventState();
+        Color color = m_pieceList[y][x]->getColor();
+        setPawnColor(color);
+    }
+}
+
 bool Model::isStepValid(const UserInput& userInput) {
     auto[origin, destination] = userInput;
     const auto[y, x] = origin;
-    destination = destination;
 
      if (m_ExistanceHandler->handleRequest(*m_pieceList[y][x], destination)) {
         return true;
@@ -204,6 +124,18 @@ bool Model::isStepValid(const UserInput& userInput) {
 void Model::takeStep(Location origin, Index destination) {
     updateBoardMatrix(origin, destination);    
     UpdatePiece_Data(destination);
+}
+
+void Model::ImplementEvent(UserInput Indexes, PieceCharacter promotedCharacter) {
+    m_Board->swapPawnWith(Indexes.first, promotedCharacter, Indexes.second);
+}
+
+Model::Color Model::getPawnColor() const {
+    return m_pawnColor;
+}
+
+void Model::setPawnColor(Color color) {
+    m_pawnColor = color;
 }
 
 bool Model::isGameFinished() const {

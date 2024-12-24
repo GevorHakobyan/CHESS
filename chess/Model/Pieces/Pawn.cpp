@@ -1,6 +1,7 @@
 #include "Pawn.hpp"
 #include <optional>
 
+
 Pawn::Pawn(const std::string& color, const wchar_t* character, Location startLocation)
  : Piece(color, character, startLocation) 
  {
@@ -69,4 +70,3 @@ void Pawn::updateAvailableCoordinates() {
         m_Avialble_Coordinates.push_back(coordinate);
     }
 }
-
