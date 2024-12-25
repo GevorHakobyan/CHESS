@@ -35,6 +35,11 @@ bool Model::Move(UserInput userInput) {
     auto[y, x] = origin;
      
     if (isStepValid(userInput)) {
+        isEvent(userInput);
+        if (isEventActive()) {
+            return false;
+        }
+
         takeStep(origin, destination);
 
         const auto[Ynew, Xnew] = destination;
@@ -45,12 +50,14 @@ bool Model::Move(UserInput userInput) {
 
         if (Broker::isEnemyKingUnderCheck((*m_pieceList[Ynew][Xnew]))) { 
             if (Broker::isKingKilled(*m_pieceList[Ynew][Xnew])) {
+                interruptGame();
+                m_winner = m_pieceList[Ynew][Xnew]->getColor();
             }
         }
 
         return true;
     }    
-    isEvent(userInput);
+    PawnEventSignaler::deactivateState();
     return false; 
 }
 
@@ -77,16 +84,16 @@ const PieceList& Model::getPieceList() const {
 }
 
 
-void Model::ActivateEventState() {
-    m_EventState = true;
+void Model::ActivatePawnEventState() {
+    m_PawnEventState = true;
 }
 
 void Model::DeactivateEvent() {
-    m_EventState = false;
+    m_PawnEventState = false;
 }
 
 bool Model::isEventActive() const {
-    return m_EventState;
+    return m_PawnEventState;
 }
 
 void Model::UndoStep(UserInput userInput) {
@@ -98,17 +105,15 @@ void Model::UndoStep(UserInput userInput) {
 }
 
 void Model::isEvent(UserInput indexes) {
+    if (!PawnEventSignaler::isEventActive()) {
+        return;
+    } 
     auto [origin, destination] = indexes;
     auto [y, x] = origin;
-    if (&(*m_pieceList[y][x]) == nullptr) {
-        return;
-    }
-
-    if(Broker::isPawnEventTime(*m_pieceList[y][x], destination)) {
-        ActivateEventState();
-        Color color = m_pieceList[y][x]->getColor();
-        setPawnColor(color);
-    }
+    ActivatePawnEventState();
+    Color color = m_pieceList[y][x]->getColor();
+    setPawnColor(color);
+    PawnEventSignaler::deactivateState();
 }
 
 bool Model::isStepValid(const UserInput& userInput) {
@@ -138,6 +143,14 @@ void Model::setPawnColor(Color color) {
     m_pawnColor = color;
 }
 
-bool Model::isGameFinished() const {
-    
+Model::Color Model::getWinnerColor() const {
+    return m_winner;
+}
+
+void Model::interruptGame() {
+    m_GameState = !m_GameState;
+}
+
+bool Model::isGameOn() const {
+    return m_GameState;
 }

@@ -7,6 +7,7 @@
 #include "desiredSquareHandler.hpp"
 #include "QueHandler.hpp"
 #include "Broker.hpp"
+#include "PawnEventSignaler.hpp"
 #include <QDebug>
 #include <iostream>
 
@@ -28,11 +29,13 @@ class Model {
     //Event 
     void DeactivateEvent();
     bool isEventActive() const;
-    bool isGameFinished() const; 
+    bool isGameOn() const;
+    Color getWinnerColor() const;
 
     private:
     void isEvent(UserInput);
-    void ActivateEventState();
+    void ActivatePawnEventState();
+    void interruptGame();
     void updateBoardMatrix(Index&, Index&);
     void UndoBoardUpdate(Index&, Index&);
     void UpdatePiece_Data(Location&);
@@ -53,6 +56,7 @@ class Model {
     HandlerPtr<AvailableCoordinates_Handler> m_AvailableHandler{nullptr};
     HandlerPtr<Barriers_Handler> m_BarriersHandler{nullptr};
     HandlerPtr<DesiredSquare_Handler> m_DesiredHandler{nullptr};
+    Color m_winner{Color::Unknown};
     //Event
     public:
     void ImplementEvent(UserInput, PieceCharacter);
@@ -60,6 +64,7 @@ class Model {
     private:
     void setPawnColor(Color);
     Color m_pawnColor{};
-    bool m_EventState{false};
+    bool m_PawnEventState{false};
+    bool m_GameState{true};
 };
 #endif //CHESS_MODEL_HPP

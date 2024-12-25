@@ -18,16 +18,10 @@ class Broker {
     using Color = Piece::Color;
     public: //methods
     Broker() = default;
-    static Answer HandleIfPawn(const Piece&, const Location&);
-    static bool isEmpty(const Location&);
-    static bool isEnemy(const Location&, const Color&);
-    static bool isPawnEventTime(const Piece&, const Location&);
     static bool isMyKingUnderCheck(const Piece&);
     static bool isEnemyKingUnderCheck(const Piece&);
     static bool isKingKilled(const Piece&);
     private:
-    static bool isOnSameColum(const Piece&, const Location&);
-    static bool isPawn(const Piece&);
     static bool canDefend(const std::pair<Location, Location>&);
     static void moveDefender(const Location&, const Location&);
     static void resetDefender(const Location&, const Location&);

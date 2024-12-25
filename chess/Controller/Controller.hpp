@@ -8,11 +8,13 @@ class Controller {
     public:
     using Window = MainWindow;
     using Color = Model::Color;
-    using PawnColor = MainWindow::PawnColor;
+    using PieceColor = MainWindow::PieceColor;
     Controller();
     void Play();
 
     private:
+    void InterruptGame();
+    bool isGameOn();
     void CheckIfEvent(bool);
     void swap();
     Model* m_Model{nullptr};

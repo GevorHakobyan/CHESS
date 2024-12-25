@@ -11,8 +11,8 @@
 class ChessBoard : public QWidget {
     Q_OBJECT
     public:
-    enum class States{Normal, PawnEvent};
-    enum PawnColor{White, Black, Undefined};
+    enum class States{Normal, PawnEvent, EOG};
+    enum PieceColor{White, Black, Undefined};
     using Location = std::pair<size_t, size_t>;
     using Index = std::pair<size_t, size_t>;
     using PieceIndexes = std::pair<Index, Index>;
@@ -23,7 +23,8 @@ class ChessBoard : public QWidget {
     explicit ChessBoard();
     ~ChessBoard() override = default;
     PieceIndexes getIndexes() const;
-    void ChangeBoardState(PawnColor);
+    void ChangeBoardStateToPawn(PieceColor);
+    void ChangeBoardStateToEOG(PieceColor);
     void ChangeBoardContent();
     PieceCharacter getPromotedCharacter();
     signals:
@@ -31,17 +32,21 @@ class ChessBoard : public QWidget {
     
     private:
     PieceCharacter getUserChoice(QMouseEvent*) const;
+    void printWinner(QPainter&);
     void printChoices();
     void setSquareColor(QPainter&, size_t, size_t) const;
     void printRow(QPainter&, size_t);
-    void printSquares(QPainter&) ;
+    void printSquares(QPainter&);
+    void printLetters(QPainter&);
+    void printNumbers(QPainter&);
     void printCharacters(QPainter&);
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void setMap();
     private:
     States m_State{States::Normal};
-    PawnColor m_pawnColor{PawnColor::Undefined};
+    PieceColor m_pawnColor{PieceColor::Undefined};
+    PieceColor m_winner{PieceColor::Undefined};
     PieceCharacter m_PromotedCharacter{L"\u265F"};
     Map m_BoardState{};
     bool m_Que{false};

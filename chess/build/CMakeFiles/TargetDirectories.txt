@@ -1,0 +1,5 @@
+/home/geveorg/Desktop/CHESS/chess/build/CMakeFiles/ChessProject.dir
+/home/geveorg/Desktop/CHESS/chess/build/CMakeFiles/edit_cache.dir
+/home/geveorg/Desktop/CHESS/chess/build/CMakeFiles/rebuild_cache.dir
+/home/geveorg/Desktop/CHESS/chess/build/CMakeFiles/ChessProject_autogen_timestamp_deps.dir
+/home/geveorg/Desktop/CHESS/chess/build/CMakeFiles/ChessProject_autogen.dir
